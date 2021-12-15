@@ -2,7 +2,7 @@
 <html>
   <head>
 	<meta charset="UTF-8">
-    <title>我的博客</title>
+    <title>若若的博客</title>
     <style>
 * {
     box-sizing: border-box;
@@ -19,7 +19,7 @@ body {
 .header {
     padding: 30px;
     text-align: center;
-    background: lightpink;
+    background: lightpink ;
     color: white;
     text-shadow: 4px 4px salmon;letter-spacing: 20px;
 }
@@ -106,13 +106,17 @@ body {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0);
   background-image: url('../pictures/search.png');
   background-position: 10px 10px; 
   background-repeat: no-repeat;
-  background-size: 2.5%;
-  padding: 12px 20px 12px 40px;
-  padding: 3px;
+  background-size: 5%;
+  padding: 40px;
+  margin-left: 80px;
+  width: 50%;
+  box-sizing: border-box;
+  border: 3px solid lightsalmon;
+  border-radius: 25px;
 }
 
 
@@ -124,21 +128,9 @@ div.polaroid {
   text-align: center;
 }
 
-/* 搜索框 */
-.sticky input[type=text] {
-  width: 130px;
-  box-sizing: border-box;
-  border: 3px solid salmon;
-  border-radius: 25px;
-  font-size: 16px;
- background-color: rgba(0, 0, 0, 0);
-  padding: 12px 20px 12px 40px;
-  transition: width 0.4s ease-in-out;
-}
 
-input[type=text]:focus {
-  width: 100%;
-}
+
+
 
 /* 列容器 */
 .row {  
@@ -211,9 +203,8 @@ div.container {
 
 <body>
 <div class="header">
-	<img class="logo" src="../pictures/logo.png">
-  <h1>wruoruo's blog</h1>
-  <p>@wruoruo</p>
+  <h1>若若的博客</h1>
+  <p>wruoruo's blog</p>
 </div>
  
 <ul class="navbar">
@@ -231,12 +222,6 @@ div.container {
   </li>
 </ul>
  
-<div class="sticky">
-<form>
-  <input type="text" name="search" value="" placeholder="搜索">
-</form>
-</div>
-
 
 <div class="row">
   <div class="side">
@@ -244,6 +229,9 @@ div.container {
       <h5 class="word2">若若是一个可爱的博客主人</h5>
       <h5 class="word2">因此博客还不够成熟</h5>
 
+<div class="sticky">
+<h2 class="word1">wruoruo</h2>
+</div>
 
 
       <div class="img1" style="height:300px;"><img src="../pictures/111.gif"  style="width:100%"></div>
@@ -252,9 +240,6 @@ div.container {
       <p class="word2">《书经.大禹谟》:"可爱非君?可畏非民?"
       <br>
 【宋】陆游《老学庵笔记.卷四》:"荆棘中有崖石，刻树石二大字，奇古可爱。"</p>
-      <div class="img1" style="height:50px;"></div><br>
-      <div class="img1" style="height:50px;"></div><br>
-      <div class="img1" style="height:50px;"></div><br>
       <div class="img1" style="height:50px;"></div><br>
       <div class="img1" style="height:50px;"></div><br>
       <div class="img1" style="height:50px;"></div>
@@ -266,13 +251,13 @@ div.container {
   <div class="polaroid">
     <img src="../pictures/drink.jpg"  style="width:100%">
     <div class="container">
-      <p class=word5>可爱饮料</p>
+      <p class=word5>绝对路径</p>
     </div>
   </div>
   <div class="polaroid">
     <img src="../pictures/snack.jpg"  style="width:100%">
     <div class="container">
-      <p class=word5>可爱零食</p>
+      <p class=word5>相对路径</p>
     </div>
   </div>
 
@@ -287,7 +272,7 @@ div.container {
  
 <div class="footer">
   <h2>努力学习中...</h2>
-  <p> Designed&nbsp;&nbsp;By&nbsp;&nbsp;王若涵6109119116<br></p>
+  <p> &nbsp;&nbsp;By&nbsp;&nbsp;王若涵6109119116<br></p>
 </div>
 </body>
 <html>
