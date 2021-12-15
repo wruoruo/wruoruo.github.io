@@ -1,196 +1,323 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  
+  <head>
+	<meta charset="UTF-8">
+    <title>购物网页设计</title>
+    <style>
+* {
+    box-sizing: border-box;
+}
+ 
+/* body 样式 */
+body {
+    font-family: Arial;
+    margin: 0;
+}
+ 
+/* logo图标 */
+.logo {
+  position: absolute;left: 400px;top: 100px; width: 6%; height: auto;
+}
 
-  
-  <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+/* 标题 */
+.header {
+    padding: 30px;
+    text-align: center;
+    background: lightpink;
+    color: white;
+    text-shadow: 4px 4px salmon;letter-spacing: 20px;
+}
+ 
+/* 标题字体加大 */
+.header h1 {
+    font-size: 60px;
+}
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+/* 字体样式设置 */
+.word1{
+	color: lightcoral;
+}
+.word2{
+	color: indianred;
+}
+.word3{
+  color: salmon;
+}
+.word4{
+  color:lightpink;
+}
+.word5{
+  color:tomato;
+}
+
+/* 导航（含下拉框） */
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: salmon;
+}
+
+.navbar li {
+  float: left;
+}
+
+.navbar li a, .dropbtn {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar li a:hover, .dropdown:hover .dropbtn {
+  background-color: lightsalmon;
+}
+
+.navbar li.dropdown {
+  display: inline-block;
+  float: right;
+
+}
+
+.dropdown-content {
+  font-size: 14px;
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 110px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.navbar .dropdown-content a {
+  color: tomato;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {background-color: salmon;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+ 
+/* 粘性框 */
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  background-image: url('../pictures/search.png');
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  background-size: 2.5%;
+  padding: 12px 20px 12px 40px;
+  padding: 3px;
+}
+
+
+
+div.polaroid {
+  float: left;
+  width: 25%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+}
+
+/* 搜索框 */
+.sticky input[type=text] {
+  width: 130px;
+  box-sizing: border-box;
+  border: 3px solid salmon;
+  border-radius: 25px;
+  font-size: 16px;
+ background-color: rgba(0, 0, 0, 0);
+  padding: 12px 20px 12px 40px;
+  transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+  width: 100%;
+}
+
+/* 列容器 */
+.row {  
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+}
+ 
+/* 创建两个列 */
+/* 边栏 */
+.side {
+    -ms-flex: 30%; /* IE10 */
+    flex: 30%;
+    background-color: lavenderblush;
+    padding: 20px;
+}
+ 
+/* 主要的内容区域 */
+.main {   
+    -ms-flex: 70%; /* IE10 */
+    flex: 70%;
+    background-color: mistyrose;
+    padding: 20px;
+}
+ 
+
+/* 图片 */
+.img1 {
+    background-color: lightpink;
+    width: 100%;
+    padding: 20px;
+}
+
+/* 图片 */
+.img2 {
+  float: left;
+    background-color: lightpink;
+    width: 25%;
+    padding: 20px;
+}
+ 
+/* 底部 */
+.footer {
+    padding: 10px;
+    text-align: center;
+    background: lightpink;
+    color: white;
+}
+ 
+div.container {
+  padding: 5px;
+}
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 700px 时, 让两栏上下堆叠显示 */
+@media screen and (max-width: 700px) {
+    .row {   
+        flex-direction: column;
+    }
+}
+ 
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 400px 时, 让导航栏目上下堆叠显示 */
+@media screen and (max-width: 400px) {
+    .navbar a {
+        float: none;
+        width: 100%;
+    }
+}
+  </style>
+</head>
 
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
+<div class="header">
+	<img class="logo" src="../pictures/logo.png">
+  <h1>桃宝</h1>
+  <p>taobao</p>
+</div>
+ 
+<ul class="navbar">
+  <li><a href="#">首页</a></li>
+  <li><a href="#">活动中心</a></li>
+  <li><a href="#">个人中心</a></li>
+  <li><a href="#">购物车</a></li>
+  <li class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn">&nbsp;&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;&nbsp;</a>
+    <div class="dropdown-content">
+      <a href="#">顾客入口</a>
+      <a href="#">商家入口</a>
+      <a href="#">管理员入口</a>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/11/16/hello-world/" class="article-date">
-  <time datetime="2021-11-16T14:14:55.532Z" itemprop="datePublished">2021-11-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/11/16/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/11/16/hello-world/" data-id="ckw38v71g0000lguj3t3tgjd3" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
+  </li>
+</ul>
+ 
+<div class="sticky">
+<form>
+  <input type="text" name="search" value="" placeholder="搜索可爱">
+</form>
+</div>
 
 
-  
+<div class="row">
+  <div class="side">
+      <h2 class="word1">关于桃宝</h2>
+      <h5 class="word2">桃宝是一个售卖可爱的网站</h5>
 
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
 
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li></ul>
-    </div>
+      <div class="img1" style="height:300px;"><img src="../pictures/111.gif"  style="width:100%"></div>
+      <p class="word2">&nbsp;&nbsp;&nbsp;&nbsp;可爱(拼音:kě ài)，汉语词汇，意思是令人敬爱的。也指令人喜爱的，讨人喜欢的，深受热爱的。</p>
+      <h3 class="word2">引经据典</h3>
+      <p class="word2">《书经.大禹谟》:"可爱非君?可畏非民?"
+      <br>
+【宋】陆游《老学庵笔记.卷四》:"荆棘中有崖石，刻树石二大字，奇古可爱。"</p>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div>
   </div>
 
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/11/16/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
+  <div class="main">
+      <h2 class="word2" style="text-align: center;">货区</h2>
+      <h5 class="word2">在这里，您能看见在售商品展示</h5>
+  <div class="polaroid">
+    <img src="../pictures/drink.jpg"  style="width:100%">
+    <div class="container">
+      <p class=word5>可爱饮料</p>
     </div>
   </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2021 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+  <div class="polaroid">
+    <img src="../pictures/snack.jpg"  style="width:100%">
+    <div class="container">
+      <p class=word5>可爱零食</p>
     </div>
   </div>
-</footer>
+  <div class="polaroid">
+    <img src="../pictures/cloth.jpg"  style="width:100%">
+    <div class="container">
+      <p class=word5>可爱衣裙</p>
     </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
   </div>
+  <div class="polaroid">
+    <img src="../pictures/decoration.jpg"  style="width:100%">
+    <div class="container">
+      <p class=word5>可爱饰品</p>
+    </div>
+  </div>
+  <br><br><br><br>
+  <br><br><br><br>
+  <br><br><br><br>
+  <br><br><br><br>
+<hr color=pink size="5">
+ <hr color=white size="5">
+      <b><p class="word2">商品热卖中...</p></b>
+      <p class="word2">
+&nbsp;&nbsp;&nbsp;&nbsp;商品是为了出售而生产的劳动成果，是人类社会生产力发展到一定历史阶段的产物，是用于交换的劳动产品。
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;恩格斯对此进行了科学的总结:商品"首先是私人产品。但是，只有这些私人产品不是为自己消费，而是为他人的消费，即为社会的消费而生产时，它们才成为商品;它们通过交换进入社会的消费"。
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;会计学中商品的定义是商品流通企业外购或委托加工完成，验收入库用于销售的各种商品。在人教版必修一政治书中的定义是用于交换的劳动产品。商品的基本属性是价值和使用价值。价值是商品的本质属性，使用价值是商品的自然属性</p>
+      <br>
+      <h2 class="word2">登录查看更多内容~</h2>
+      <h5 class="word2">快去</h5>
+      <div class="img2" style="height:200px;"><img src="../pictures/222.gif"  style="width:100%"></div>
+      <div class="img2" style="height:200px;"><img src="../pictures/222.gif"  style="width:100%"></div>
+      <div class="img2" style="height:200px;"><img src="../pictures/222.gif"  style="width:100%"></div>
+      <div class="img2" style="height:200px;"><img src="../pictures/222.gif"  style="width:100%"></div>
+      <p class="word2">还不登陆</p>
+      <p class="word2">揍你！！！</p>
+  </div>
+</div>
+ 
+<div class="footer">
+  <h2>可爱持续进货中...</h2>
+  <p> Designed&nbsp;&nbsp;By&nbsp;&nbsp;王若涵6109119116<br></p>
+</div>
 </body>
-</html>
+<html>
