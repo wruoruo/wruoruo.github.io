@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+    <title>购物网页设计</title>
+    <style>
+* {
+    box-sizing: border-box;
+}
+ 
+/* body 样式 */
+body {
+    font-family: Arial;
+    margin: 0;
+}
+ 
+/* logo图标 */
+.logo {
+  position: absolute;left: 400px;top: 100px; width: 6%; height: auto;
+}
+
+/* 标题 */
+.header {
+    padding: 30px;
+    text-align: center;
+    background: lightpink;
+    color: white;
+    text-shadow: 4px 4px salmon;letter-spacing: 20px;
+}
+ 
+/* 标题字体加大 */
+.header h1 {
+    font-size: 60px;
+}
+
+/* 字体样式设置 */
+.word1{
+	color: lightcoral;
+}
+.word2{
+	color: indianred;
+}
+.word3{
+  color: salmon;
+}
+.word4{
+  color:lightpink;
+}
+.word5{
+  color:tomato;
+}
+
+/* 导航（含下拉框） */
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: salmon;
+}
+
+.navbar li {
+  float: left;
+}
+
+.navbar li a, .dropbtn {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar li a:hover, .dropdown:hover .dropbtn {
+  background-color: lightsalmon;
+}
+
+.navbar li.dropdown {
+  display: inline-block;
+  float: right;
+
+}
+
+.dropdown-content {
+  font-size: 14px;
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 110px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.navbar .dropdown-content a {
+  color: tomato;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {background-color: salmon;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+ 
+/* 粘性框 */
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  background-image: url('../pictures/search.png');
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  background-size: 2.5%;
+  padding: 12px 20px 12px 40px;
+  padding: 3px;
+}
+
+
+
+div.polaroid {
+  float: left;
+  width: 25%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+}
+
+/* 搜索框 */
+.sticky input[type=text] {
+  width: 130px;
+  box-sizing: border-box;
+  border: 3px solid salmon;
+  border-radius: 25px;
+  font-size: 16px;
+ background-color: rgba(0, 0, 0, 0);
+  padding: 12px 20px 12px 40px;
+  transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+  width: 100%;
+}
+
+/* 列容器 */
+.row {  
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+}
+ 
+/* 创建两个列 */
+/* 边栏 */
+.side {
+    -ms-flex: 30%; /* IE10 */
+    flex: 30%;
+    background-color: lavenderblush;
+    padding: 20px;
+}
+ 
+/* 主要的内容区域 */
+.main {   
+    -ms-flex: 70%; /* IE10 */
+    flex: 70%;
+    background-color: mistyrose;
+    padding: 20px;
+}
+ 
+
+/* 图片 */
+.img1 {
+    background-color: lightpink;
+    width: 100%;
+    padding: 20px;
+}
+
+/* 图片 */
+.img2 {
+  float: left;
+    background-color: lightpink;
+    width: 25%;
+    padding: 20px;
+}
+ 
+/* 底部 */
+.footer {
+    padding: 10px;
+    text-align: center;
+    background: lightpink;
+    color: white;
+}
+ 
+div.container {
+  padding: 5px;
+}
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 700px 时, 让两栏上下堆叠显示 */
+@media screen and (max-width: 700px) {
+    .row {   
+        flex-direction: column;
+    }
+}
+ 
+/* 响应式布局 - 在屏幕设备宽度尺寸小于 400px 时, 让导航栏目上下堆叠显示 */
+@media screen and (max-width: 400px) {
+    .navbar a {
+        float: none;
+        width: 100%;
+    }
+}
+  </style>
+</head>
+
+<body>
+<div class="header">
+	<img class="logo" src="../pictures/logo.png">
+  <h1>桃宝</h1>
+  <p>taobao</p>
+</div>
+ 
+<ul class="navbar">
+  <li><a href="#">首页</a></li>
+  <li><a href="#">活动中心</a></li>
+  <li><a href="#">个人中心</a></li>
+  <li><a href="#">购物车</a></li>
+  <li class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn">&nbsp;&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;&nbsp;</a>
+    <div class="dropdown-content">
+      <a href="#">顾客入口</a>
+      <a href="#">商家入口</a>
+      <a href="#">管理员入口</a>
+    </div>
+  </li>
+</ul>
+ 
+<div class="sticky">
+<form>
+  <input type="text" name="search" value="" placeholder="搜索可爱">
+</form>
+</div>
+
+
+<div class="row">
+  <div class="side">
+      <h2 class="word1">关于桃宝</h2>
+      <h5 class="word2">桃宝是一个售卖可爱的网站</h5>
+
+
+
+      <div class="img1" style="height:300px;"><img src="../pictures/111.gif"  style="width:100%"></div>
+      <p class="word2">&nbsp;&nbsp;&nbsp;&nbsp;可爱(拼音:kě ài)，汉语词汇，意思是令人敬爱的。也指令人喜爱的，讨人喜欢的，深受热爱的。</p>
+      <h3 class="word2">引经据典</h3>
+      <p class="word2">《书经.大禹谟》:"可爱非君?可畏非民?"
+      <br>
+【宋】陆游《老学庵笔记.卷四》:"荆棘中有崖石，刻树石二大字，奇古可爱。"</p>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div><br>
+      <div class="img1" style="height:50px;"></div>
+  </div>
+
+  <div class="main">
+      <h2 class="word2" style="text-align: center;">货区</h2>
+      <h5 class="word2">在这里，您能看见在售商品展示</h5>
+  <div class="polaroid">
+    <img src="../pictures/drink.jpg"  style="width:100%">
+    <div class="container">
+      <p class=word5>可爱饮料</p>
+    </div>
+  </div>
+  <div class="polaroid">
+    <img src="../pictures/snack.jpg"  style="width:100%">
+    <div class="container">
+      <p class=word5>可爱零食</p>
+    </div>
+  </div>
+  <div class="polaroid">
+    <img src="../pictures/cloth.jpg"  style="width:100%">
+    <div class="container">
+      <p class=word5>可爱衣裙</p>
+    </div>
+  </div>
+  <div class="polaroid">
+    <img src="../pictures/decoration.jpg"  style="width:100%">
+    <div class="container">
+      <p class=word5>可爱饰品</p>
+    </div>
+  </div>
+  <br><br><br><br>
+  <br><br><br><br>
+  <br><br><br><br>
+  <br><br><br><br>
+<hr color=pink size="5">
+ <hr color=white size="5">
+      <b><p class="word2">商品热卖中...</p></b>
+      <p class="word2">
+&nbsp;&nbsp;&nbsp;&nbsp;商品是为了出售而生产的劳动成果，是人类社会生产力发展到一定历史阶段的产物，是用于交换的劳动产品。
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;恩格斯对此进行了科学的总结:商品"首先是私人产品。但是，只有这些私人产品不是为自己消费，而是为他人的消费，即为社会的消费而生产时，它们才成为商品;它们通过交换进入社会的消费"。
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;会计学中商品的定义是商品流通企业外购或委托加工完成，验收入库用于销售的各种商品。在人教版必修一政治书中的定义是用于交换的劳动产品。商品的基本属性是价值和使用价值。价值是商品的本质属性，使用价值是商品的自然属性</p>
+      <br>
+      <h2 class="word2">登录查看更多内容~</h2>
+      <h5 class="word2">快去</h5>
+      <div class="img2" style="height:200px;"><img src="../pictures/222.gif"  style="width:100%"></div>
+      <div class="img2" style="height:200px;"><img src="../pictures/222.gif"  style="width:100%"></div>
+      <div class="img2" style="height:200px;"><img src="../pictures/222.gif"  style="width:100%"></div>
+      <div class="img2" style="height:200px;"><img src="../pictures/222.gif"  style="width:100%"></div>
+      <p class="word2">还不登陆</p>
+      <p class="word2">揍你！！！</p>
+  </div>
+</div>
+ 
+<div class="footer">
+  <h2>可爱持续进货中...</h2>
+  <p> Designed&nbsp;&nbsp;By&nbsp;&nbsp;王若涵6109119116<br></p>
+</div>
+</body>
+<html>
