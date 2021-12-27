@@ -1,0 +1,1 @@
+这里是桃宝购物管理系统里resources的static代码
