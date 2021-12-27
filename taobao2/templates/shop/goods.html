@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>图书管理</title>
+    <link rel="stylesheet" href="${ctxPath}/assets/module/formSelects/formSelects-v4.css"/>
+    <% include("../layout/css.html"){} %>
+</head>
+<style>
+    body {
+        overflow: scroll;
+    }
+    #goodsTable + .layui-table-view .layui-table-body tbody > tr > td {
+        padding: 0;
+    }
+
+    #goodsTable + .layui-table-view .layui-table-body tbody > tr > td > .layui-table-cell {
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .tdImg {
+        width: 40px;
+        height: 40px;
+        cursor: zoom-in;
+        border-radius: 50%;
+        border: 2px solid #dddddd;
+    }
+    /* 表单标题加虚线 */
+    .form-item-title {
+        text-align: center;
+        position: relative;
+    }
+
+    .form-item-title:before {
+        content: "";
+        position: absolute;
+        border-top: 1px dashed #ccc;
+        left: 40px;
+        right: 40px;
+        top: 8px;
+        z-index: -1;
+    }
+
+    .form-item-title > span {
+        background-color: white;
+        padding: 0 10px;
+        font-size: 13px;
+        color: #666;
+    }
+    .layui-upload-img {
+        width: 92px;
+        height: 92px;
+        margin: 0 10px 10px 0;
+    }
+
+    .imgDiv {
+        display: inline-block;
+        position: relative;
+    }
+    .imgDiv .delete {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+    }
+</style>
+<body>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">商品名称：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="goodsName" class="layui-input" type="text" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">品牌：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="author" class="layui-input" type="text" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">商家名称：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="press" class="layui-input" type="text" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">商品分类：</label>
+                        <div class="layui-input-inline mr0">
+                            <select name="goodsType">
+                                <option value="">请选择</option>
+                                <% for(public in publices) { %>
+                            	<option value="${public.id}">${public.name}</option>
+                            	<% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn icon-btn" lay-filter="searchSubmit" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                        <button class="layui-btn icon-btn" id="btnAdd">
+                            <i class="layui-icon">&#xe654;</i>新增
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <table id="goodsTable" lay-filter="goodsTable"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 表单弹窗 -->
+<script type="text/html" id="modelGoods">
+    <form id="modelGoodsForm" lay-filter="modelGoodsForm" class="layui-form layui-row model-form">
+        <input name="goodsId" type="hidden"/>
+        <input name="goodsImg" type="hidden"/>
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-form-required">商品名称</label>
+                    <div class="layui-input-block">
+                        <input name="goodsName" placeholder="请输入商品名称" type="text" class="layui-input" maxlength="100"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-form-required">图书类型</label>
+                    <div class="layui-input-block">
+                        <select name="goodsType" lay-filter="goodsTypeFilter" lay-verType="tips" lay-verify="required" required>
+							<% for(public in publices) { %>
+                            <option value="${public.id}">${public.name}</option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="LAY-PRICE">
+                    <label class="layui-form-label layui-form-required">价格</label>
+                    <div class="layui-input-block">
+                        <input name="shopPrice" placeholder="请输入价格" type="number" class="layui-input" maxlength="100"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="LAY-RE-PRICE">
+                    <label class="layui-form-label layui-form-required">参考价格</label>
+                    <div class="layui-input-block">
+                        <input name="shopRePrice" placeholder="请输入商品参考价格" type="number" class="layui-input" maxlength="100"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">商品描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="goodsDesc" placeholder="请输入内容" class="layui-textarea" maxlength="200"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-col-md6">
+				<div class="layui-form-item">
+                    <label class="layui-form-label layui-form-required">品牌</label>
+                    <div class="layui-input-block">
+                        <input name="author" placeholder="请输入品牌" type="text" class="layui-input" maxlength="100"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+				<div class="layui-form-item">
+                    <label class="layui-form-label layui-form-required">商家名称</label>
+                    <div class="layui-input-block">
+                        <input name="press" placeholder="请输入商家名称" type="text" class="layui-input" maxlength="100"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+                <div class="layui-form-item form-item-title"><span>商品图片</span></div>
+                <div class="layui-form-item" style="text-align: center">
+                    <div class="layui-upload-drag" id="uploadModel">
+                        <i class="layui-icon"></i>
+                        <p>点击上传，或将文件拖拽到此处</p>
+                        <div class="layui-hide" id="uploadDemoView">
+                            <hr>
+                            <img src="" alt="上传成功后渲染" style="max-width: 196px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <input name="goodsDetailsImgs"  type="hidden" value="" />
+                <div class="layui-form-item form-item-title"><span>商品详情图(最多上传6张)</span></div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="test2">多图片上传</button>
+                            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                                预览图：
+                                <div class="layui-upload-list" id="demo2"></div>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn" lay-filter="modelGoodsSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+<!-- 是否上架状态列 -->
+<script type="text/html" id="tableSaleState">
+    <input type="checkbox" lay-filter="saleState" value="{{d.goodsId}}" lay-skin="switch"
+           lay-text="是|否" {{d.isSale==1?'checked':''}}/>
+</script>
+<!-- 颜色管理表格操作列 -->
+<script type="text/html" id="demoTableEDCommentsBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- js部分 -->
+<% include("../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'tableX','upload','formSelects'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var tableX = layui.tableX;
+        var upload = layui.upload;
+        var formSelects = layui.formSelects;
+
+        // 渲染表格
+        var insTb = tableX.render({
+            elem: '#goodsTable',
+            url: 'goods/list',
+            page: true,
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'numbers'},
+                {
+                    align: 'center', templet: function (d) {
+                        return '<img src="' + d.goodsImg + '" class="tdImg" tb-img/>';
+                    }, title: '商品图', width: 90, unresize: true
+                },
+                {field: 'goodsSn', title: '商品编号'},
+                {field: 'goodsName', title: '商品名称'},
+                {field: 'author', title: '品牌'},
+                {field: 'press', title: '商家名称'},
+                {field: 'shopPrice', title: '价格', sort: true},
+                {field: 'shopRePrice', title: '参考价格', sort: true},
+                {field: 'goodsTypeName', title: '商品类型'},
+                {field: 'nickName', title: '发布人', sort: true},
+                {
+                    field: 'createTime', sort: true, templet: function (d) {
+                        return util.toDateString(d.createTime);
+                    }, title: '创建时间'
+                },
+                {field: 'isSale', templet: '#tableSaleState', title: '是否上架', sort: true, width: 110},
+                {field: 'goodsDesc', title: '商品描述'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 150}
+            ]]
+        });
+        // 点击图片放大
+        $(document).off('click.tbImg').on('click.tbImg', '[tb-img]', function () {
+            layer.photos({photos: {data: [{src: $(this).attr('src')}]}, shade: .1, closeBtn: true});
+        });
+
+        // 添加
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 搜索
+        form.on('submit(searchSubmit)', function (data) {
+            insTb.reload({where: data.field, page: {curr: 1}});
+        });
+
+        // 工具条点击事件
+        table.on('tool(goodsTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (layEvent === 'del') { // 删除
+                doDel(obj);
+            }
+        });
+
+        /* form.on('select(goodsTypeFilter)', function(data){
+           if(data.value==3){
+               $('#LAY-PRICE').hide();
+               $('#LAY-RE-PRICE').hide();
+               $('input[name=shopPrice]').removeAttr("required");
+               $('input[name=shopPrice]').removeAttr("lay-verify");
+               $('input[name=shopPrice]').removeAttr("lay-verType");
+               $('input[name=shopRePrice]').removeAttr("required");
+               $('input[name=shopRePrice]').removeAttr("lay-verify");
+               $('input[name=shopRePrice]').removeAttr("lay-verType");
+           }else{
+               $('#LAY-PRICE').show();
+               $('#LAY-RE-PRICE').show();
+               $('input[name=shopPrice]').attr("required");
+               $('input[name=shopPrice]').attr("lay-verify","required")
+               $('input[name=shopPrice]').attr("lay-verType","tips");
+               $('input[name=shopRePrice]').attr("required");
+               $('input[name=shopRePrice]').attr("lay-verify","required")
+               $('input[name=shopRePrice]').attr("lay-verType","tips");
+           }
+        }) */
+
+        // 搜索
+        form.on('submit(searchSubmit)', function (data) {
+            insTb.reload({where: data.field, page: {curr: 1}});
+        });
+
+        // 显示表单弹窗
+        function showEditModel(mGoods) {
+            admin.open({
+                type: 1,
+                title: (mGoods ? '修改' : '添加') + '商品',
+                content: $('#modelGoods').html(),
+                area:'90%',
+                success: function (layero, dIndex) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                    //拖拽上传
+                    upload.render({
+                        elem: '#uploadModel'
+                        ,url: '/file/upload'
+                        ,done: function(res){
+                            if(res.code == 200){
+                                $('input[name=goodsImg]').val(res.data);
+                                layer.msg(res.msg, {icon: 1});
+                                layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.data);
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        }
+                    });
+                    //多图片上传
+                    upload.render({
+                        elem: '#test2'
+                        ,url: '/file/upload'
+                        ,multiple: true
+                        ,number:6
+                        ,before: function(obj){
+                            //预读本地文件示例，不支持ie8
+                            obj.preview(function(index, file, result){
+                                var h= '<div class="imgDiv">'+
+                                            '<img style="margin-left:5px" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">'+
+                                            '<a href="javascript:void(0)" id="'+ result +'" onclick="test(this.id)">'+
+                                            '<img src="${ctxPath}/assets/images/delete.png" class="delete" />'+
+                                            '</a>'+
+                                        '</div>';
+                                $('#demo2').append(h)
+                            });
+                        }
+                        ,done: function(res){
+                            var text;
+                            if(res.data){
+                                var str=res.data;
+                                text=$('input[name=goodsDetailsImgs]').val()+","+str+",";
+                                if (text.substr(0,1)==',') text=text.substr(1);
+                                var regs=/,$/gi;
+                                text=text.replace(regs,"");
+                                layer.msg(res.msg, {icon: 1});
+                            }
+                            $('input[name=goodsDetailsImgs]').val(text);
+                        }
+                    });
+                    var url = mGoods ? 'goods/update' : 'goods/add';
+                    if(mGoods){
+                        /* if(mGoods.goodsType==3){
+                            $('#LAY-PRICE').hide();
+                            $('#LAY-RE-PRICE').hide();
+                            $('input[name=shopPrice]').removeAttr("required");
+                            $('input[name=shopPrice]').removeAttr("lay-verify");
+                            $('input[name=shopPrice]').removeAttr("lay-verType");
+                            $('input[name=shopRePrice]').removeAttr("required");
+                            $('input[name=shopRePrice]').removeAttr("lay-verify");
+                            $('input[name=shopRePrice]').removeAttr("lay-verType");
+                        } */
+                        form.val('modelGoodsForm', mGoods);
+                        layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', mGoods.goodsImg);
+                        if(mGoods.goodsDetailsImgs){
+                            var imgsArr=mGoods.goodsDetailsImgs.split(",");
+                            var h="";
+                            for(i = 0,len=imgsArr.length;  i< len; i++){
+                                 h+= '<div class="imgDiv" id="'+ imgsArr[i] +'">'+
+                                            '<img style="margin-left:5px" src="'+ imgsArr[i] +'" class="layui-upload-img">'+
+                                            '<a href="javascript:void(0)" id="'+ imgsArr[i] +'" onclick="test(this.id)">'+
+                                                '<img src="${ctxPath}/assets/images/delete.png" class="delete" />'+
+                                            '</a>'+
+                                        '</div>';
+                            }
+                            $('#demo2').html(h)
+                        }
+                    }else{
+                        form.render('select');
+                    }
+                    // 表单提交事件
+                    form.on('submit(modelGoodsSubmit)', function (data) {
+                        if(data.field.goodsImg==''){
+                            layer.tips("请为您的商品上传一张图片吧",'#uploadModel',{
+                                tips: [1, 'rgb(255,76,76)']
+                            });
+                        }else{
+                            var imgs=data.field.goodsDetailsImgs;
+                            //去掉第一位逗号
+                            if (imgs.substr(0,1)==',') imgs=imgs.substr(1);
+                            //去掉最后一个逗号
+                            var reg=/,$/gi;
+                            imgs=imgs.replace(reg,"");
+                            console.log(imgs);
+                            data.field.goodsDetailsImgs=imgs;
+                            console.log(data.field);
+                            layer.load(2);
+                            $.post(url, data.field, function (res) {
+                                layer.closeAll('loading');
+                                if (res.code == 200) {
+                                    layer.close(dIndex);
+                                    layer.msg(res.msg, {icon: 1});
+                                    insTb.reload();
+                                } else {
+                                    layer.msg(res.msg, {icon: 2});
+                                }
+                            }, 'json');
+                        }
+                        return false;
+                    });
+                }
+            });
+        }
+         window.test=function(path){
+             var imgs=$('input[name=goodsDetailsImgs]').val();
+             var arr=imgs.split(",");
+             arr.splice(contains(arr,path),1);
+             $('input[name=goodsDetailsImgs]').val(arr.join(","));
+             var h="";
+             for(i = 0,len=arr.length;  i< len; i++){
+                 h+= '<div class="imgDiv" id="'+ arr[i] +'">'+
+                        '<img style="margin-left:5px" src="'+ arr[i] +'" class="layui-upload-img">'+
+                     '<a href="javascript:void(0)" id="'+ arr[i] +'" onclick="test(this.id)">'+
+                     '<img src="${ctxPath}/assets/images/delete.png" class="delete" />'+
+                     '</a>'+
+                     '</div>';
+             }
+             $('#demo2').html(h)
+         }
+        function contains(a, obj) {
+            var i = a.length;
+            while (i--) {
+                if (a[i] === obj) {
+                    return i;
+                }
+            }
+            return false;
+        }
+
+        // 删除
+        function doDel(obj) {
+            layer.confirm('确定要删除此图书吗？', {
+                shade: .1,
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                $.post('goods/delete', {
+                    goodsId: obj.data.goodsId
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+
+        // 修改上架状态
+        form.on('switch(saleState)', function (obj) {
+            layer.load(2);
+            $.post('goods/updateState', {
+                goodsId: obj.elem.value,
+                isSale: obj.elem.checked ? 1 : 0
+            }, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            }, 'json');
+        });
+    });
+</script>
+</body>
+</html>

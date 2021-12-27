@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zsj.es.shop.dao.ApplyMerchantMapper">
+
+    <select id="listFull" resultType="com.zsj.es.shop.model.ApplyMerchant">
+        select
+        app.*,
+        u.nick_name as nickName,
+        u.avatar as avatar
+        from e_apply_merchant app
+        left join sys_user u on app.user_id=u.user_id
+        <where>
+            <if test="page.pageData.userId!=null">
+                app.user_id=#{page.pageData.userId}
+            </if>
+        </where>
+        order by app.apply_time desc
+    </select>
+</mapper>

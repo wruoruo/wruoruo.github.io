@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>桃宝商城管理系统平台</title>
+    <% include("./layout/css.html"){} %>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!-- 头部 -->
+    <% include("./layout/header.html"){} %>
+    <!-- 侧边栏 -->
+    <% include("./layout/side.html"){} %>
+    <!-- 主体部分 -->
+    <div class="layui-body"></div>
+    <!-- 底部 -->
+    <div class="layui-footer">
+        copyright © 2021 all rights reserved.<span class="pull-right">v1.0.0</span>
+    </div>
+</div>
+
+<!-- js部分 -->
+<% include("./layout/js.html"){} %>
+<script type="text/javascript" src="${ctxPath}/assets/js/util/reconnecting-websocket.min.js"></script>
+<script>
+    layui.use(['index','layim','upload'], function () {
+        var $ = layui.jquery;
+        var index = layui.index;
+        var layim = layui.layim;
+        var upload = layui.upload;
+
+        layim.config({
+            init: {
+                url:'/system/user/listByIm'
+                ,type: 'get' //默认get，一般可不填
+                ,data: {} //额外参数
+            }
+            //上传图片接口（返回的数据格式见下文），若不开启图片上传，剔除该项即可
+            ,uploadImage: {
+                url: '/file/uploadIm' //接口地址
+                ,type: 'post' //默认post
+            }
+        });
+        layim.cache().base.title = "客户中心";
+        var websocket = null;
+
+        //判断当前浏览器是否支持WebSocket
+        if ('WebSocket' in window) {
+            websocket = new ReconnectingWebSocket("ws://localhost:8089/websocket/" + "${loginUser.userId}");
+        } else {
+            alert('当前浏览器 Not support websocket')
+        }
+
+        //连接发生错误的回调方法
+        websocket.onerror = function() {};
+        //连接成功建立的回调方法
+        websocket.onopen = function() {};
+        //接收到消息的回调方法
+        websocket.onmessage = function(event) {
+            var data = event.data;//服务器返回的消息，前端页面可以根据不同的消息做不同的操作。
+            layim.getMessage(JSON.parse(data));
+        }
+        //连接关闭的回调方法
+        websocket.onclose = function() {
+            //setMessageInnerHTML("WebSocket连接关闭");
+        }
+
+        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+        window.onbeforeunload = function() {
+            closeWebSocket();
+        }
+
+        //layim消息发送监听器
+        layim.on('sendMessage', function(res) {
+            var mine = res.mine; //包含我发送的消息及我的信息
+            var to = res.to; //对方的信息
+            var msg = {
+                'userId':mine.id,
+                "nickName":mine.username,
+                'avatar':mine.avatar,
+                "type":to.type,
+                'collectUserId': to.id,
+                'collectUserName':to.name,
+                'content': mine.content,
+                'collectAvatar':to.avatar
+            }
+            console.log(JSON.stringify(msg));
+            send(JSON.stringify(msg));
+        });
+
+        //将消息显示在网页上
+        function setMessageInnerHTML(innerHTML) {
+            //    document.getElementById('message').innerHTML += innerHTML + '<br/>';
+        }
+        //关闭WebSocket连接
+        function closeWebSocket() {
+            websocket.close();
+        }
+
+        //发送消息
+        function send(msg) {
+            websocket.send(msg);
+        }
+
+        // 默认加载主页
+        index.loadHome({
+            menuPath: 'console',
+            menuName: '<i class="layui-icon layui-icon-home"></i>'
+        });
+
+    });
+</script>
+</body>
+</html>

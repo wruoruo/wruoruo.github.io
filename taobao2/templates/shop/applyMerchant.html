@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>申请管理</title>
+    <% include("../layout/css.html"){} %>
+</head>
+<body>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">商品名：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="goodsName" class="layui-input" type="text" placeholder="输入商品名"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn icon-btn" lay-filter="searchSubmit" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="appraiseTable" lay-filter="appraiseTable"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+	{{#  if(d.status ==1 ){ }}
+	<a class="layui-btn layui-btn layui-btn-xs" lay-event="pass">通过</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="reject">驳回</a>
+    {{#  } }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- js部分 -->
+<% include("../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'rate', 'tableX'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var tableX = layui.tableX;
+        var rate = layui.rate;
+
+        // 渲染表格
+        var insTb = tableX.render({
+            elem: '#appraiseTable',
+            url: 'applyMerchant/list',
+            page: true,
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'nickName', title: '申请人'},
+                {
+                    field: 'applyTime', sort: true, templet: function (d) {
+                        return util.toDateString(d.applyTime);
+                    }, title: '申请时间'
+                },
+                {
+                    field: 'status', sort: true, templet: function (d) {
+                        if (d.status == 1){
+                        	return '<span class="layui-badge layui-bg-orange">待审核</span>'
+                        } else if (d.status == 2){
+                        	return '<span class="layui-badge layui-bg-green">已通过</span>'
+                        } else {
+                        	return '<span class="layui-badge layui-bg-black">被驳回</span>'
+                        }
+                    }, title: '状态'
+                },
+                {field: 'applyContent', title: '申请理由', width: 300},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 200}
+            ]]
+        });
+
+        // 搜索
+        form.on('submit(searchSubmit)', function (data) {
+            insTb.reload({where: data.field, page: {curr: 1}});
+        });
+
+        // 工具条点击事件
+        table.on('tool(appraiseTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (layEvent === 'del') { // 删除
+                doDel(obj);
+            } else if (layEvent === 'view') {  // 查看评价内容
+                showAppraiseModel(data);
+            } else if (layEvent === 'pass'){
+            	audit(obj, 2);
+            } else if (layEvent === 'reject'){
+            	audit(obj, 3);
+            }
+        });
+
+        // 删除
+        function doDel(obj) {
+            layer.confirm('确定要删除该条商家申请吗？', {
+                shade: .1,
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                $.post('applyMerchant/delete', {
+                    id: obj.data.id
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+	
+     	// 审核
+        function audit(obj, status) {
+            layer.confirm('确定要审核该条商家申请吗？', {
+                shade: .1,
+                skin: 'layui-layer-admin'
+            }, function (i) {
+                layer.close(i);
+                layer.load(2);
+                $.post('applyMerchant/audit', {
+                    id: obj.data.id,
+                    userId: obj.data.userId,
+                    status: status
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+
+    });
+</script>
+</body>
+</html>
