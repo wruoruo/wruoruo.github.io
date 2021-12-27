@@ -1,0 +1,33 @@
+{
+  "code": 0
+  ,"msg": ""
+  ,"data": {
+    "mine": {
+      "username": "客服中心"
+      ,"id": "1"
+      ,"status": "online"
+      ,"avatar": "http://tp1.sinaimg.cn/1571889140/180/40030060651/1"
+    }
+    ,"friend": [{
+      "groupname": "客户中心"
+      ,"id": 0
+      ,"list": [{
+        "username": "一个小石头"
+        ,"id": "2"
+        ,"avatar": "http://thirdqq.qlogo.cn/g?b=oidb&k=pK18ebvJeCnGundmu9GoAQ&s=640&t=1571929112"
+      },{
+        "username": "dd"
+        ,"id": "3"
+        ,"avatar": "http://thirdqq.qlogo.cn/g?b=oidb&k=pK18ebvJeCnGundmu9GoAQ&s=640&t=1571929112"
+      },{
+        "username": "丁大海"
+        ,"id": "4"
+        ,"avatar": "http://thirdqq.qlogo.cn/g?b=oidb&k=pK18ebvJeCnGundmu9GoAQ&s=640&t=1571929112"
+      },{
+        "username": "顶大声"
+        ,"id": "5"
+        ,"avatar": "http://thirdqq.qlogo.cn/g?b=oidb&k=pK18ebvJeCnGundmu9GoAQ&s=640&t=1571929112"
+      }]
+    }]
+  }
+}
