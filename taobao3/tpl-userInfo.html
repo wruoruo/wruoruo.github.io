@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>桃宝商城管理系统</title>
+  <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
+  <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+    <form id="modelRegisterForm" lay-filter="modelRegisterForm" class="layui-form model-form">
+        <input name="userId" type="hidden">
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">账号</label>
+            <div class="layui-input-inline">
+                <input name="username" type="text" class="layui-input layui-disabled" disabled />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">昵称</label>
+            <div class="layui-input-inline">
+                <input name="nickName" type="text" class="layui-input" lay-verType="tips" lay-verify="required" placeholder="请输入昵称" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">电话</label>
+            <div class="layui-input-inline">
+                <input name="phone" type="text" class="layui-input"  lay-verType="tips" lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="sex" value="男" title="男" checked/>
+                <input type="radio" name="sex" value="女" title="女"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">地址</label>
+            <div class="layui-input-inline">
+                <input name="receivingAddress" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" placeholder="请输入常用地址" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <a id="btnPsw" class="layui-btn icon-btn">修改密码</a>
+            <button class="layui-btn" lay-filter="modelUserInfoSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+    
+<!-- 修改密码表单弹窗 -->
+<script type="text/html" id="modelPsw">
+    <form class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">原始密码:</label>
+            <div class="layui-input-block">
+                <input type="password" name="oldPsw" placeholder="请输入原始密码" class="layui-input"
+                        lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新密码:</label>
+            <div class="layui-input-block">
+                <input type="password" name="newPsw" placeholder="请输入新密码" class="layui-input"
+                        lay-verType="tips" lay-verify="required|psw" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认密码:</label>
+            <div class="layui-input-block">
+                <input type="password" name="rePsw" placeholder="请再次输入新密码" class="layui-input"
+                        lay-verType="tips" lay-verify="required|repsw" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block text-right">
+                <button class="layui-btn" lay-filter="submitPsw" lay-submit>保存</button>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/javascript" src="res/layui/layui.js"></script>
+<script type="text/javascript">
+ layui.config({
+    base: 'res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
+  }).use(['jquery','form','config','layer'],function(){
+        var $ = layui.$,
+            form = layui.form,
+            config = layui.config,
+            layer =layui.layer;
+
+         var userId=sessionStorage.userId;
+        if(userId!='' && userId!=undefined){     
+            $.get(config.base_server+'api/getUserById',{"userId":userId},function(res){
+                //赋值，渲染
+                form.val('modelRegisterForm',res.data);
+            })
+        }
+        //提交
+        form.on('submit(modelUserInfoSubmit)', function (data) {
+              var jsonStr={
+                "userId":data.field.userId,
+                "nickName":data.field.nickName,
+                "phone":data.field.phone,
+                "sex":data.field.sex,
+                "receivingAddress":data.field.receivingAddress,
+              };
+              layer.load(2);
+              $.post(config.base_server+"api/updateMyInfo", data.field, function (res) {
+                  console.log(res);
+                  layer.closeAll('loading');
+                  if (res.code == 200) {
+                    layer.msg(res.msg, {
+                        icon: 1,
+                        time:1500,
+                        end:function(){
+                            top.location.href='commodity.html';
+                        }
+                    });          
+                    //修改成功，修改缓存信息
+                    sessionStorage.nickName=res.data.nickName;
+                  } else {
+                      layer.msg(res.msg, {icon: 2});
+                  }
+              }, 'json');
+              return false;
+          });
+
+                  // 添加表单验证方法
+        form.verify({
+            psw: [/^[\S]{5,12}$/, '密码必须5到12位，且不能出现空格'],
+            repsw: function (t) {
+                if (t !== $('input[name=newPsw]').val()) {
+                    return '两次密码输入不一致';
+                }
+            }
+        });
+
+          $('#btnPsw').click(function(){
+            layer.open({
+                type: 1,
+                title: '修改密码',
+                area:['300px','300px'],
+                content: $('#modelPsw').html(),
+                success: function (layero, dIndex) {
+
+                     form.on('submit(submitPsw)', function (data) {
+                        var jsonStr={"userId":userId,"oldPsw":data.field.oldPsw,"newPsw":data.field.newPsw};
+                         layer.load(2);
+                         $.post(config.base_server+"api/updatePsw", jsonStr, function (res) {
+                             layer.closeAll('loading');
+                             if (res.code == 200) {
+                                 layer.close(dIndex);
+                                 layer.msg(res.msg, {
+                                    icon: 1,
+                                    time:1500,
+                                    end:function(){
+                                        top.location.href='commodity.html';
+                                    }
+                                }); 
+                             } else {
+                                 layer.msg(res.msg, {icon: 2});
+                             }
+                         }, 'json');
+                       return false;
+                   });
+                }
+            });
+          })
+    })
+</script>
+</body>
+</html>

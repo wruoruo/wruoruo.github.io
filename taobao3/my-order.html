@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>桃宝商城管理系统</title>
+  <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
+  <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
+  <script type="text/javascript" src="res/layui/layui.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+
+  <div class="site-nav-bg">
+    <div class="site-nav w1200">
+      <p class="sn-back-home">
+        <i class="layui-icon layui-icon-home"></i>
+        <a href="commodity.html">首页</a>
+      </p>
+      <div class="sn-quick-menu">
+        <div class="login" style="display: '';"><a href="login.html">登录</a></div>
+        <div class="userinfo" style="display:none"><a href="#" ew-event="uinfo"><cate class="nickname"></cate></a></div>
+        <div class="sp-cart" style="display: none;"><a href="shopcart.html">购物车</a><span id="cartCount"></span></div>
+        <div class="my-order" style="display: none;"><a href="my-order.html">我的订单</a><span id="orderCount"></span></div>
+        <div class="logout" style="display:none"><a href="#"  ew-event="logout">退出</a></div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="header">
+    <div class="headerLayout w1200">
+      <div class="headerCon">
+        <h1 class="mallLogo">
+          <a href="#" title="桃宝商城管理系统">
+            桃宝商城管理系统
+          </a>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="content content-nav-base shopcart-content">
+    <div class="main-nav">
+      <div class="inner-cont0">
+        <div class="inner-cont1 w1200">
+          <div class="crumb">
+            <a href="commodity.html">首页</a>
+            <span>></span>
+            <a href="commodity.html">所有商品</a>
+            <span>></span>
+            <a href="javascript:;">我的订单</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart w1200" style="width: 1400px;">
+      <div class="cart-table-th">
+        <div class="th">
+          <div class="select-all">
+          </div>
+        </div>
+        <div class="th th-simg">
+          <div class="th-inner">
+            商品
+          </div>
+        </div>
+        <div class="th th-sn">
+          <div class="th-inner">
+            订单号
+          </div>
+        </div>
+        <div class="th th-sm">
+          <div class="th-inner">
+            价格
+          </div>
+        </div>
+        <div class="th th-sm">
+          <div class="th-inner">
+            商品数量
+          </div>
+        </div>
+		<div class="th th-sm">
+          <div class="th-inner">
+            卖家电话
+          </div>
+        </div>
+        <div class="th th-sm">
+          <div class="th-inner">
+            订单状态
+          </div>
+        </div>
+        <div class="th th-time">
+          <div class="th-inner">
+            下单时间
+          </div>
+        </div> 
+        <div class="th th-time">
+          <div class="th-inner">
+            发货时间
+          </div>
+        </div> 
+         <div class="th th-bar">
+          <div class="th-inner">
+            操作
+          </div>
+        </div> 
+      </div>
+      <div class="OrderList">
+         <div class="order-content" id="list-cont">
+
+        </div>
+      </div>
+
+
+      <!-- 模版导入数据 -->
+        <script type="text/html" id="orderTpl">
+        {{# layui.each(d.data,function(index,item){}}
+        <ul class="item-content2 layui-clear">
+          <li class="th" style="width: 200px;">
+            <div class="item-cont">
+              <a href="javascript:;"><img src="{{item.goodsImg}}" alt=""></a>
+              <div class="text">
+                <div class="title">{{item.goodsName}}</div>
+                <!--<p>尺码：<span id="goodsSize">{{item.goodsSize}}</span></p>
+                <p>颜色：<span id="goodsColor">{{item.goodsColor}}</span></p>  -->
+              </div>
+            </div>
+          </li>
+          <li class="th" style="width: 130px;">
+            <span class="th-su">{{item.orderNo}}</span>
+          </li>
+          <li class="th" style="width: 90px;">
+            <span class="th-su">￥{{item.goodsMoney}}</span>
+          </li>
+          <li class="th" style="width: 90px;">
+            <span class="th-su">{{item.goodsNum}}</span>
+          </li>
+		  <li class="th" style="width: 90px;">
+            <span class="th-su">
+			{{item.publishPhone==null?"暂无电话":item.publishPhone}}
+			</span>
+          </li>
+          <li class="th" style="width: 90px;">
+              {{#  if(item.orderStatus ==-3 ){ }}
+              <span class="layui-badge layui-bg-black">已拒收</span>
+              {{#  } else if(item.orderStatus==-2){ }}
+                  <span class="layui-badge">未付款</span>
+              {{#  } else if(item.orderStatus==-1){ }}
+                  <span class="layui-badge layui-bg-bgray">已取消</span>
+              {{#  } else if(item.orderStatus==0){ }}
+                  <span class="layui-badge layui-bg-cyan">待发货</span>
+              {{#  } else if(item.orderStatus==1){ }}
+                  <span class="layui-badge layui-bg-orange">配送中</span>
+              {{#  } else if(item.orderStatus==2){ }}
+              <span class="layui-badge layui-bg-green">已收货</span>
+              {{#  } else if(item.orderStatus==3){ }}
+              <span class="layui-badge">待评价</span>
+              {{#  } else { }}
+                  <span class="layui-badge layui-bg-blue">已完结</span>
+              {{#  } }}
+          </li>
+          <li class="th" style="width: 150px;">
+            <span class="th-su">{{item.createTime}}</span>
+          </li>
+          <li class="th" style="width: 150px;">
+            {{#  if(item.deliveryTime == null ){ }}
+            <span class="th-su" style="color:red">未发货</span>
+            {{#  } else { }}
+            <span class="th-su">{{item.deliveryTime}}</span>
+            {{#  } }}
+          </li>
+          <li class="th" style="width: 240px;">
+            {{#  if(item.orderStatus == 1){ }}
+            <span id="{{item.orderId}}" class="bar-span" onclick="reject(this.id)">拒收</span>
+            <span id="{{item.orderId}}" class="bar-span" onclick="confirm(this.id)">确认收货</span>
+            <span id="{{item.orderId}}" class="bar-span" onclick="cancel(this.id)">取消订单</span>
+
+            {{#  } else if(item.orderStatus==0){ }}
+            <span class="bar-span" onclick="remind()">提醒卖家发货</span>
+            <span id="{{item.orderId}}" class="bar-span" onclick="cancel(this.id)">取消订单</span>
+
+            {{#  } else if(item.orderStatus==-3){ }}
+            <span>该订单已被拒收，拒收原因：<p style="font-weight:bold ">{{item.rejectReason}}</p></span>
+            {{#  } else if(item.orderStatus==-1){ }}
+            <span>该订单已取消，取消原因：<p style="font-weight:bold ">{{item.cancelReason}}</p></span>
+            {{#  } else if(item.orderStatus==3){ }}
+            <span id="{{item.goodsSn}}" data-orderId="{{item.orderId}}" class="bar-span" onclick="appraise(this)">去评价</span>
+            {{#  } else { }}    
+            {{#  } }}         
+          </li> 
+        </ul>
+        {{# });}}
+      </script>
+
+
+      <div class="FloatBarHolder layui-clear">
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- 评价弹窗 -->
+<script type="text/html" id="modelAppraise">
+  <form id="modelAppraiseForm" lay-filter="modelAppraiseForm" class="layui-form model-form">
+      <div class="layui-form-item">
+        <label class="layui-form-label">商品质量：</label>
+        <div class="layui-input-block">
+          <div id="commodityQuality"></div>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">描述相符：</label>
+        <div class="layui-input-block">
+          <div id="coincide"></div>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">物流服务：</label>
+        <div class="layui-input-block">
+          <div id="logisticsService"></div>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">评价内容</label>
+        <div class="layui-input-block">
+            <textarea name="comments" placeholder="请输入内容" class="layui-textarea" maxlength="200"></textarea>
+        </div>
+      </div>
+      <div class="layui-form-item text-right">
+          <button class="layui-btn" lay-filter="modelAppraiseSubmit" lay-submit>保存</button>
+      </div>
+  </form>
+</script>
+<script type="text/javascript" src="res/static/js/util/reconnecting-websocket.min.js"></script>
+<script type="text/javascript">
+  layui.config({
+    base: 'res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
+  }).use(['mm','jquery','element','config','laytpl','rate','form','layim','upload'],function(){
+    var mm = layui.mm,
+        $ = layui.$,
+        element = layui.element,
+        config = layui.config,
+        rate = layui.rate,
+        form = layui.form,
+        layim = layui.layim,
+        upload = layui.upload,
+        laytpl = layui.laytpl;
+    
+        var websocket = null; 
+        layim.config({
+              init: {
+                //配置客户信息
+                mine: {
+                  "username": sessionStorage.nickName//我的昵称
+                  ,"id": sessionStorage.userId==null?"":sessionStorage.userId.toString()//我的ID
+                  ,"status": "online" //在线状态 online：在线、hide：隐身
+                  ,"avatar": sessionStorage.avatar //我的头像
+                }
+              }
+              //开启客服模式
+              ,brief: true
+              ,uploadImage: {
+                url: config.base_server+'/api/file/uploadIm' //接口地址
+                ,type: 'post' //默认post
+            }
+          });
+
+        var userId=sessionStorage.userId;
+        if(userId!='' && userId!=undefined){     
+            $('.login').css('display','none');
+            $('.nickname').text(sessionStorage.nickName);
+            $('.userinfo').css('display',''); 
+            $('.sp-cart').css('display','');
+            $('.my-order').css('display','');
+            $('.logout').css('display','');
+            $.get(config.base_server+"api/cart/countByUser",{"userId":userId},function(res){
+              $('#cartCount').text(res.data); 
+            })
+            $.get(config.base_server+"api/order/countByUser",{"userId":userId},function(res){
+              $('#orderCount').text(res.data); 
+            })
+
+             //判断当前浏览器是否支持WebSocket
+             if ('WebSocket' in window) {
+                websocket = new ReconnectingWebSocket("ws://localhost:8089/websocket/" + userId.toString());
+            } else {
+              alert('当前浏览器 Not support websocket')
+            }
+
+           //连接发生错误的回调方法
+            websocket.onerror = function() {}; 
+            //连接成功建立的回调方法
+             websocket.onopen = function() {};
+            //接收到消息的回调方法
+            websocket.onmessage = function(event) {          
+                var data = event.data;//服务器返回的消息，前端页面可以根据不同的消息做不同的操作。   
+                console.log(data);
+                layim.getMessage(JSON.parse(data));
+                               
+            }
+            //连接关闭的回调方法
+            websocket.onclose = function() {
+            //    setMessageInnerHTML("WebSocket连接关闭");
+            }
+
+            //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+            window.onbeforeunload = function() {
+                closeWebSocket();
+            } 
+
+          //打开一个客服面板
+          layim.chat({
+            name: '客服中心' //名称
+            ,type: 'friend' //聊天类型
+            ,avatar: 'http://tp1.sinaimg.cn/1571889140/180/40030060651/1' //头像
+            ,id: config.collectUserId //定义唯一的id方便你处理信息
+          });
+          layim.setChatMin(); //收缩聊天面板
+        }
+
+        //将消息显示在网页上
+        function setMessageInnerHTML(innerHTML) {
+        }
+        //关闭WebSocket连接
+        function closeWebSocket() {
+            websocket.close();
+        } 
+        //发送消息
+        function send(msg) {
+            websocket.send(msg);
+        }
+
+         //layim消息发送监听器
+        layim.on('sendMessage', function(res) {
+            var mine = res.mine; //包含我发送的消息及我的信息    
+            var to = res.to; //对方的信息
+            var msg = {
+                    'userId':mine.id,
+                    "nickName":mine.username,
+                    'avatar':mine.avatar,
+                    "type":to.type,
+                    'collectUserId': to.id,
+                    'collectUserName':to.name,
+                    'content': mine.content            
+                  }
+            console.log(JSON.stringify(msg));
+            send(JSON.stringify(msg));
+        });
+
+    // 模版导入数据
+    var html = orderTpl.innerHTML,
+     listCont = document.getElementById('list-cont');
+     mm.request({
+       url: config.base_server+'api/order/listByUser',
+       data:{"userId":userId},
+       success : function(res){
+         console.log(res);
+         listCont.innerHTML = mm.renderHtml(html,res)
+         element.render();
+       },
+       error: function(res){
+         console.log(res);
+       }
+     })
+
+     //提醒发货
+    window.remind=function(){
+      layer.msg("已提醒卖家快点发货，请不要重复点击");
+    }
+     //拒收操作
+     window.reject=function(orderId){
+      layer.prompt({
+          title: '请输入拒收货原因：',
+          formType: 2,
+          skin: 'layui-layer-admin layui-layer-prompt',
+          shade: .1
+        }, function (value, index, elem) {
+          var jsonStr={"orderId":orderId,"rejectReason":value,"orderStatus":-3};
+          $.post(config.base_server+"api/order/updateOrder",jsonStr,function(res){
+            if(res.code==200){
+              layer.close(index);
+              layer.msg(res.msg, {
+                icon: 1,
+                time:1000,
+                end:function(){
+                  window.location.reload();
+                }
+              });  
+            }else{
+              layer.msg(res.msg, {icon: 2});
+            }
+          })
+            
+        });
+     }
+     //取消订单操作
+    window.cancel=function(orderId){
+      layer.prompt({
+          title: '请输入取消订单原因：',
+          formType: 2,
+          skin: 'layui-layer-admin layui-layer-prompt',
+          shade: .1
+        }, function (value, index, elem) {
+          var jsonStr={"orderId":orderId,"cancelReason":value,"orderStatus":-1};
+          $.post(config.base_server+"api/order/updateOrder",jsonStr,function(res){
+            if(res.code==200){
+              layer.close(index);
+              layer.msg(res.msg, {
+                icon: 1,
+                time:1000,
+                end:function(){
+                  window.location.reload();
+                }
+              });  
+            }else{
+              layer.msg(res.msg, {icon: 2});
+            }
+          })
+            
+        });
+     }
+     //确认收货操作
+     window.confirm=function(orderId){
+      layer.confirm('你确认收货了么？',{
+        yes:function(index,layero){
+          var jsonStr={"orderId":orderId,"orderStatus":3};
+          $.post(config.base_server+"api/order/receive",jsonStr,function(res){
+            if(res.code==200){
+              layer.close(index);
+              layer.msg(res.msg, {
+                  icon: 1,
+                  time:1000,
+                  end:function(){
+                    window.location.reload();
+                  }
+                });  
+            }else{
+              layer.msg(res.msg, {icon: 2});
+            }
+          })
+        }
+      })
+     }
+     //评价操作
+     window.appraise=function(_this){
+      layer.open({
+            type: 1,
+            title: '商品评价',
+            area:'400px',
+            content: $('#modelAppraise').html(),
+            success: function (layero, dIndex) {
+              var star1=rate.render({
+                elem: '#commodityQuality'
+                ,value: 5
+                ,text: true
+                ,setText: function(value){ //自定义文本的回调
+                  var arrs = {
+                    '1': '极差'
+                    ,'2': '差'
+                    ,'3': '中等'
+                    ,'4': '好'
+                    ,'5': '极好'
+                  };
+                  this.span.text(arrs[value] || ( value + "星"));
+                }
+              })
+              var star2=rate.render({
+                elem: '#coincide'
+                ,value: 5
+                ,text: true
+                ,setText: function(value){ //自定义文本的回调
+                  var arrs = {
+                    '1': '极差'
+                    ,'2': '差'
+                    ,'3': '中等'
+                    ,'4': '好'
+                    ,'5': '极好'
+                  };
+                  this.span.text(arrs[value] || ( value + "星"));
+                }
+              })
+              var star3=rate.render({
+                elem: '#logisticsService'
+                ,value: 5
+                ,text: true
+                ,setText: function(value){ //自定义文本的回调
+                  var arrs = {
+                    '1': '极差'
+                    ,'2': '差'
+                    ,'3': '中等'
+                    ,'4': '好'
+                    ,'5': '极好'
+                  };
+                  this.span.text(arrs[value] || ( value + "星"));
+                }
+              })
+
+              // 表单提交事件
+              form.on('submit(modelAppraiseSubmit)', function (data) {
+                var goodsSn=$(_this).attr("id");
+                var orderId=$(_this).attr("data-orderId");
+                var jsonStr={
+                  "goodsSn":goodsSn,
+                  "userId":userId,
+                  "commodityQuality":star1.config.value,
+                  "logisticsService":star3.config.value,
+                  "coincide":star2.config.value,
+                  "comments":data.field.comments,
+                  "orderId":orderId
+                };
+                console.log(jsonStr);
+                layer.load(2);
+                $.post(config.base_server+"api/appraise/add", jsonStr, function (res) {
+                    layer.closeAll('loading');
+                    if(res.code==200){
+                      layer.close(dIndex);
+                      layer.msg(res.msg, {
+                        icon: 1,
+                        time:1000,
+                        end:function(){
+                          window.location.reload();
+                        }
+                      });  
+                  }else{
+                    layer.msg(res.msg, {icon: 2});
+                  }
+                }, 'json');
+                return false;
+            });
+            }
+        });
+     }
+});
+</script>
+</body>
+</html>,

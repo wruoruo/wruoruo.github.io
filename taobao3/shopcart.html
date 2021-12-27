@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>桃宝商城管理系统</title>
+  <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
+  <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
+  <script type="text/javascript" src="res/layui/layui.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+
+  <div class="site-nav-bg">
+    <div class="site-nav w1200">
+      <p class="sn-back-home">
+        <i class="layui-icon layui-icon-home"></i>
+        <a href="commodity.html">首页</a>
+      </p>
+      <div class="sn-quick-menu">
+        <div class="login" style="display: '';"><a href="login.html">登录</a></div>
+        <div class="userinfo" style="display:none"><a href="#" ew-event="uinfo"><cate class="nickname"></cate></a></div>
+        <div class="sp-cart" style="display: none;"><a href="shopcart.html">购物车</a><span id="cartCount"></span></div>
+        <div class="my-order" style="display: none;"><a href="my-order.html">我的订单</a><span id="orderCount"></span></div>
+        <div class="logout" style="display:none"><a href="#"  ew-event="logout">退出</a></div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="header">
+    <div class="headerLayout w1200">
+      <div class="headerCon">
+        <h1 class="mallLogo">
+          <a href="#" title="桃宝商城管理系统">
+            桃宝商城管理系统
+          </a>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="content content-nav-base shopcart-content">
+    <div class="main-nav">
+      <div class="inner-cont0">
+        <div class="inner-cont1 w1200">
+          <div class="crumb">
+            <a href="commodity.html">首页</a>
+            <span>></span>
+            <a href="commodity.html">所有图书</a>
+            <span>></span>
+            <a href="javascript:;">购物车</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart w1200">
+      <div class="cart-table-th">
+        <div class="th th-chk">
+          <div class="select-all">
+            <div class="cart-checkbox">
+              <input class="check-all check" id="allCheckked" type="checkbox" value="true">
+            </div>
+          <label>&nbsp;&nbsp;全选</label>
+          </div>
+        </div>
+        <div class="th th-item">
+          <div class="th-inner">
+            图书
+          </div>
+        </div>
+        <div class="th th-price">
+          <div class="th-inner">
+            单价
+          </div>
+        </div>
+        <div class="th th-amount">
+          <div class="th-inner">
+            数量
+          </div>
+        </div>
+        <div class="th th-sum">
+          <div class="th-inner">
+            小计
+          </div>
+        </div>
+        <div class="th th-op">
+          <div class="th-inner">
+            操作
+          </div>
+        </div>  
+      </div>
+      <div class="OrderList">
+        <div class="order-content" id="list-cont">
+
+        </div>
+      </div>
+
+
+      <!-- 模版导入数据 -->
+       <script type="text/html" id="cartTpl">
+        {{# layui.each(d.data,function(index,item){}}
+          <ul class="item-content layui-clear" data-goodsSn="{{item.goodsSn}}">
+            <li class="th th-chk">
+              <div class="select-all">
+                <div class="cart-checkbox">
+                  <input class="CheckBoxShop check" id="" type="checkbox" num="all" name="select-all" value="true">
+                </div>
+              </div>
+            </li>
+            <li class="th th-item">
+              <div class="item-cont">
+                <a href="javascript:;"><img src="{{item.goodsImg}}" alt=""></a>
+                <div class="text">
+                  <div class="title">{{item.goodsName}}</div>
+                <!--  {{#  if(item.goodsColor !="" && item.goodsColor!=null ){ }}
+                  <p>尺码：<span id="goodsSize">{{item.goodsSize}}</span></p>
+                  <p>颜色：<span id="goodsColor">{{item.goodsColor}}</span></p>
+                  {{#  } }}
+                  {{#  if(item.madeText !="" && item.madeText!=null){ }}
+                  <p>定制文字：<span id="madeText">{{item.madeText}}</span></p>
+                  {{#  } }}
+                  {{#  if(item.madeLogo !="" && item.madeLogo!=null){ }}
+                  <p>定制LOGO：<img id="madeLogo" data-id="{{item.madeLogo}}" class="logo-img" src="{{item.logoImg}}" alt=""></p>
+                  {{#  } }} -->
+                </div>
+              </div>
+            </li>
+            <li class="th th-price">
+              <span class="th-su">{{item.price}}</span>
+            </li>
+            <li class="th th-amount">
+              <div class="box-btn layui-clear">
+                <div class="less layui-btn">-</div>
+                <input class="Quantity-input" type=""  value="{{item.goodsNum}}" disabled="disabled">
+                <div class="add layui-btn">+</div>
+              </div>
+            </li>
+            <li class="th th-sum">
+              <span class="sum">{{item.goodsMoney}}</span>
+            </li>
+            <li class="th th-op">
+              <span id="{{item.cartId}}" onclick="del(this.id)">删除</span>
+            </li>
+          </ul>
+        {{# });}}
+      </script>
+
+
+      <div class="FloatBarHolder layui-clear">
+        <div class="th th-chk">
+          <div class="select-all">
+            <div class="cart-checkbox">
+              <input class="check-all check" id="" name="select-all" type="checkbox"  value="true">
+            </div>
+            <label>&nbsp;&nbsp;已选<span class="Selected-pieces">0</span>件</label>
+          </div>
+        </div>
+        <div class="th batch-deletion">
+          <!-- <span class="batch-dele-btn">批量删除</span> -->
+        </div>
+        <div class="th Settlement">
+          <button class="layui-btn" id="btnSettlement">结算</button>
+        </div>
+        <div class="th total">
+          <p>应付：<span class="pieces-total">0</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript" src="res/static/js/util/reconnecting-websocket.min.js"></script>
+<script type="text/javascript">
+  layui.config({
+    base: 'res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
+  }).use(['mm','jquery','element','car','config','laytpl','layim','upload'],function(){
+    var mm = layui.mm,
+        $ = layui.$,
+        element = layui.element,
+        car = layui.car,
+        config = layui.config,
+        layim = layui.layim,
+        upload = layui.upload,
+        laytpl = layui.laytpl;
+    
+        var websocket = null; 
+
+        layim.config({
+              init: {
+                //配置客户信息
+                mine: {
+                  "username": sessionStorage.nickName//我的昵称
+                  ,"id": sessionStorage.userId==null?"":sessionStorage.userId.toString()//我的ID
+                  ,"status": "online" //在线状态 online：在线、hide：隐身
+                  ,"avatar": sessionStorage.avatar //我的头像
+                }
+              }
+              //开启客服模式
+              ,brief: true
+              ,uploadImage: {
+                url: config.base_server+'/api/file/uploadIm' //接口地址
+                ,type: 'post' //默认post
+            }
+          });
+
+        var userId=sessionStorage.userId;
+        if(userId!='' && userId!=undefined){     
+            $('.login').css('display','none');
+            $('.nickname').text(sessionStorage.nickName);
+            $('.userinfo').css('display',''); 
+            $('.sp-cart').css('display','');
+            $('.my-order').css('display','');
+            $('.logout').css('display','');
+            $.get(config.base_server+"api/cart/countByUser",{"userId":userId},function(res){
+              $('#cartCount').text(res.data); 
+            })
+            $.get(config.base_server+"api/order/countByUser",{"userId":userId},function(res){
+              $('#orderCount').text(res.data); 
+            })
+             //判断当前浏览器是否支持WebSocket
+             if ('WebSocket' in window) {
+                websocket = new ReconnectingWebSocket("ws://localhost:8089/websocket/" + userId.toString());
+            } else {
+              alert('当前浏览器 Not support websocket')
+            }
+
+           //连接发生错误的回调方法
+            websocket.onerror = function() {}; 
+            //连接成功建立的回调方法
+             websocket.onopen = function() {};
+            //接收到消息的回调方法
+            websocket.onmessage = function(event) {          
+                var data = event.data;//服务器返回的消息，前端页面可以根据不同的消息做不同的操作。   
+                console.log(data);
+                layim.getMessage(JSON.parse(data));
+                               
+            }
+            //连接关闭的回调方法
+            websocket.onclose = function() {
+            //    setMessageInnerHTML("WebSocket连接关闭");
+            }
+
+            //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+            window.onbeforeunload = function() {
+                closeWebSocket();
+            } 
+
+          //打开一个客服面板
+          layim.chat({
+            name: '客服中心' //名称
+            ,type: 'friend' //聊天类型
+            ,avatar: 'http://tp1.sinaimg.cn/1571889140/180/40030060651/1' //头像
+            ,id: config.collectUserId //定义唯一的id方便你处理信息
+          });
+          layim.setChatMin(); //收缩聊天面板
+        }
+
+        //将消息显示在网页上
+        function setMessageInnerHTML(innerHTML) {
+        }
+        //关闭WebSocket连接
+        function closeWebSocket() {
+            websocket.close();
+        } 
+        //发送消息
+        function send(msg) {
+            websocket.send(msg);
+        }
+
+         //layim消息发送监听器
+        layim.on('sendMessage', function(res) {
+            var mine = res.mine; //包含我发送的消息及我的信息    
+            var to = res.to; //对方的信息
+            var msg = {
+                    'userId':mine.id,
+                    "nickName":mine.username,
+                    'avatar':mine.avatar,
+                    "type":to.type,
+                    'collectUserId': to.id,
+                    'collectUserName':to.name,
+                    'content': mine.content            
+                  }
+            console.log(JSON.stringify(msg));
+            send(JSON.stringify(msg));
+        });
+
+    // 模版导入数据
+     var html = cartTpl.innerHTML,
+     listCont = document.getElementById('list-cont');
+     mm.request({
+       url: config.base_server+'api/cart/listByUser',
+       data:{"userId":userId},
+       success : function(res){
+         console.log(res);
+         listCont.innerHTML = mm.renderHtml(html,res)
+         element.render();
+         car.init()
+       },
+       error: function(res){
+         console.log(res);
+       }
+     })
+     
+    car.init()
+
+     window.del=function(cartId){
+      layer.confirm('你确定要删除吗',{
+        yes:function(index,layero){
+          $.post(config.base_server+"api/cart/delete",{"cartId":cartId},function(res){
+            if(res.code==200){
+              layer.close(index);
+              layer.msg(res.msg, {
+                  icon: 1,
+                  time:1000,
+                  end:function(){
+                    window.location.reload();
+                  }
+                });  
+            }else{
+              layer.msg(res.msg, {icon: 2});
+            }
+          })
+        }
+      })
+     }
+
+     $('#btnSettlement').click(function(){
+        var arr=new Array();
+        $("#list-cont ul").each(function(i) {
+          arr[i]={};
+          arr[i]['goodsSn']=$(this).attr("data-goodsSn");
+          arr[i]['goodsNum']=$(this).find('.Quantity-input').val();
+          arr[i]['goodsMoney']=$(this).find('.sum').text();
+          arr[i]['userId']=userId;
+          arr[i]['orderStatus']=0;
+          arr[i]['goodsSize']=$(this).find('#goodsSize').text()==null?"":$(this).find('#goodsSize').text();
+          arr[i]['goodsColor']=$(this).find('#goodsColor').text()==null?"":$(this).find('#goodsColor').text();
+          arr[i]['madeText']=$(this).find('#madeText').text()==null?"":$(this).find('#madeText').text();
+          arr[i]['madeLogo']=$(this).find('#madeLogo').attr("data-id")==null?"":$(this).find('#madeLogo').attr("data-id");
+        });
+        if(arr.length == 0){
+          layer.msg("请去挑选几件图书吧！");
+        }else{
+          $.post(config.base_server+"api/order/addAll",{"arrStr":JSON.stringify(arr)},function(res){
+          if(res.code==200){
+                layer.msg(res.msg, {
+                  icon: 1,
+                  time:1500,
+                  end:function(){
+                    location.href='commodity.html';
+                  }
+                });                  
+              }else{
+                layer.msg(res.msg, {icon: 2});
+              }
+        })
+        }
+     })
+});
+</script>
+</body>
+</html>

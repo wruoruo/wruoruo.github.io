@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>桃宝商城管理系统</title>
+  <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
+  <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
+  <script type="text/javascript" src="res/layui/layui.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+
+  <div class="site-nav-bg">
+    <div class="site-nav w1200">
+      <p class="sn-back-home">
+        <i class="layui-icon layui-icon-home"></i>
+        <a href="commodity.html">首页</a>
+      </p>
+      <div class="sn-quick-menu">
+        <div class="login" style="display: '';"><a href="login.html">登录</a></div>
+        <div class="userinfo" style="display:none"><a href="#" ew-event="uinfo"><cate class="nickname"></cate></a></div>
+        <div class="sp-cart" id="apply" style="display:none"><a href="#" ew-event="applyMerchant">申请商家</a></div>
+        <div class="sp-cart" style="display: none;"><a href="shopcart.html">购物车</a><span id="cartCount"></span></div>
+        <div class="my-order" style="display: none;"><a href="my-order.html">我的订单</a><span id="orderCount"></span></div>
+        <div class="logout" style="display:none"><a href="#"  ew-event="logout">退出</a></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="header">
+    <div class="headerLayout w1200">
+      <div class="headerCon">
+        <h1 class="mallLogo">
+          <a href="#" title="桃宝商城管理系统">
+            桃宝商城管理系统
+          </a>
+        </h1>
+        <div class="mallSearch">
+          <form action="" class="layui-form" novalidate>
+            <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="请输入需要的商品">
+            <button class="layui-btn" lay-submit lay-filter="searchForm">
+                <i class="layui-icon layui-icon-search"></i>
+            </button>
+            <input type="hidden" name="" value="">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="content content-nav-base commodity-content">
+ 
+    <div class="commod-cont-wrap">
+      <div class="commod-cont w1200 layui-clear">
+        <div class="left-nav">
+          <div class="title">所有分类</div>
+          <div class="list-box" id="list-type">
+          </div>
+          <!-- 模版引擎导入 -->
+          <script type="text/html" id="publicType">
+             	<dt id="public-type">所有分类</dt>
+			        {{# layui.each(d.data,function(index,publicType){}}    
+				      <dd><a href="javascript:;" onclick="test({{publicType.id}});">{{publicType.name}}</a></dd>     
+              {{# }); }}
+			    	</script>
+        </div>
+        <div class="right-cont-wrap">
+          <div class="right-cont">
+            <div class="cont-list layui-clear" id="list-cont">
+            </div>
+            <!-- 模版引擎导入 -->
+             <script type="text/html" id="demo">
+              {{# layui.each(d.data,function(index,item){}}    
+             
+                <div class="item">
+                  <div class="img">
+                    <a href="details.html?goodsId={{item.goodsSn}}"><img class="img_goodsImg" src="{{item.goodsImg}}"></a>
+                  </div>
+                  <div class="text">
+                    <p class="title">{{item.goodsName}}</p>
+                    <p class="price">
+                      <span class="pri">￥{{item.shopPrice}}</span>
+                    </p>
+                  </div>
+                </div>            
+              {{# }); }}
+            </script> 
+            <!-- <div id="demo0" style="text-align: center;"></div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script>
+<script type="text/javascript" src="res/static/js/util/reconnecting-websocket.min.js"></script>
+<script>
+  layui.config({
+    base: 'res/static/js/util/'
+  }).use(['mm','laypage','jquery','config','form','laytpl','layer','layim','upload'],function(){
+      var laypage = layui.laypage,
+          $ = layui.$,
+          config = layui.config,
+          form = layui.form,
+          laytpl = layui.laytpl,
+          layer = layui.layer,
+          mm = layui.mm,
+          upload =layui.upload,
+          layim = layui.layim;
+
+          var websocket = null; 
+
+          layim.config({
+              init: {
+                //配置客户信息
+                mine: {
+                  "username": sessionStorage.nickName//我的昵称
+                  ,"id": sessionStorage.userId==null?"":sessionStorage.userId.toString()//我的ID
+                  ,"status": "online" //在线状态 online：在线、hide：隐身
+                  ,"avatar": sessionStorage.avatar //我的头像
+                }
+              }
+              //开启客服模式
+              ,brief: true
+              ,uploadImage: {
+                url: config.base_server+'/api/file/uploadIm' //接口地址
+                ,type: 'post' //默认post
+            }
+          });
+
+
+          addVisitor();
+          renderHtml("","","");
+          renderTypeHtml();
+        function addVisitor(){
+          $.post(config.base_server+'api/visitor/add',{},function(res){               
+            })       
+        }
+
+        var userId=sessionStorage.userId;
+        if(userId!='' && userId!=undefined){     
+            $('.login').css('display','none');
+            $('.nickname').text(sessionStorage.nickName);
+            $('.userinfo').css('display',''); 
+            $('.sp-cart').css('display','');
+            $('.my-order').css('display','');
+            $('.logout').css('display','');
+            $.get(config.base_server+"api/cart/countByUser",{"userId":userId},function(res){
+              $('#cartCount').text(res.data); 
+            })
+            $.get(config.base_server+"api/order/countByUser",{"userId":userId},function(res){
+              $('#orderCount').text(res.data); 
+            })
+            
+            // 判断是否申请过商家
+            $.get(config.base_server+"api/applyMerchantMapper/getIsApply",{"userId":userId},function(res){
+              if (res.data != 1){
+                $('#apply').hide();
+              }
+            })
+
+           //判断当前浏览器是否支持WebSocket
+            if ('WebSocket' in window) {
+                websocket = new ReconnectingWebSocket("ws://localhost:8089/websocket/" + userId.toString());
+            } else {
+              alert('当前浏览器 Not support websocket')
+            }
+
+           //连接发生错误的回调方法
+            websocket.onerror = function() {}; 
+            //连接成功建立的回调方法
+             websocket.onopen = function() {};
+            //接收到消息的回调方法
+            websocket.onmessage = function(event) {          
+                var data = event.data;//服务器返回的消息，前端页面可以根据不同的消息做不同的操作。   
+                console.log(data);
+                layim.getMessage(JSON.parse(data));
+                               
+            }
+            //连接关闭的回调方法
+            websocket.onclose = function() {
+            //    setMessageInnerHTML("WebSocket连接关闭");
+            }
+
+            //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+            window.onbeforeunload = function() {
+                closeWebSocket();
+            } 
+
+          //打开一个客服面板
+          layim.chat({
+            name: '客服中心' //名称
+            ,type: 'friend' //聊天类型
+            ,avatar: 'http://tp1.sinaimg.cn/1571889140/180/40030060651/1' //头像
+            ,id: config.collectUserId //定义唯一的id方便你处理信息
+          });
+          layim.setChatMin(); //收缩聊天面板
+        }
+
+        //将消息显示在网页上
+        function setMessageInnerHTML(innerHTML) {
+        }
+        //关闭WebSocket连接
+        function closeWebSocket() {
+            websocket.close();
+        } 
+        //发送消息
+        function send(msg) {
+            websocket.send(msg);
+        }
+
+         //layim消息发送监听器
+        layim.on('sendMessage', function(res) {
+            var mine = res.mine; //包含我发送的消息及我的信息    
+            var to = res.to; //对方的信息
+            console.log("to"+to);
+            var msg = {
+                    'userId':mine.id,
+                    "nickName":mine.username,
+                    'avatar':mine.avatar,
+                    "type":to.type,
+                    'collectUserId': to.id,
+                    'collectUserName':to.name,
+                    'content': mine.content,
+                    'collectAvatar':to.avatar            
+                  }
+            console.log(JSON.stringify(msg));
+            send(JSON.stringify(msg));
+        });
+        // 分类模版引擎导入
+     		function renderTypeHtml(){
+          // 模版引擎导入
+          var html = publicType.innerHTML;
+          var listCont = document.getElementById('list-type');
+          mm.request({
+     				url: config.base_server+'api/publicType/list',
+     				success : function(res){
+     					console.log(res);
+     					if(res.data.length>0){
+     						var str = mm.renderHtml(html,res);
+     						console.log(str);
+            		listCont.innerHTML = mm.renderHtml(html,res);
+          		}else{
+            		layer.msg('抱歉，没有分类', {icon: 2});
+          		}
+     				},
+     				error: function(res){
+          		console.log(res);
+     				}
+   				})
+        }
+				// 商品模板导入
+        function renderHtml(goodsType,urlStr,keyword){
+          var url=config.base_server+'api/goods/list';
+          if(urlStr!=""){
+            url=urlStr;
+          }
+          console.log(url);
+          // 模版引擎导入
+          var html = demo.innerHTML;
+          var listCont = document.getElementById('list-cont');
+          mm.request({
+            url: url,
+            data:{"goodsType":goodsType,"keyword":keyword},
+            success : function(res){
+              if(res.data.length>0){
+                listCont.innerHTML = mm.renderHtml(html,res)
+              }else{
+                layer.msg('抱歉，没有该商品', {icon: 2});
+              }
+              
+            },
+            error: function(res){
+              console.log(res);
+            }
+          })
+        }
+        window.test=function(id){
+          var urlStr=config.base_server+'api/goods/listByType';
+          renderHtml(id,urlStr,"");
+        }
+
+    $('.sort a').on('click',function(){
+      $(this).addClass('active').siblings().removeClass('active');
+    })
+    $('.list-box dt').on('click',function(){
+      if($(this).attr('off')){
+        $(this).removeClass('active').siblings('dd').show()
+        $(this).attr('off','')
+      }else{
+        $(this).addClass('active').siblings('dd').hide()
+        $(this).attr('off',true)
+      }
+    })
+
+    //搜索
+    form.on('submit(searchForm)', function (data) {
+        renderHtml("","",data.field.keyword);
+        return false;
+    });
+
+});
+</script>
+
+
+</body>
+</html>

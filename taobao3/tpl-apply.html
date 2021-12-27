@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>桃宝商城管理系统</title>
+  <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
+  <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+    <form id="modelRegisterForm" lay-filter="modelRegisterForm" class="layui-form model-form">
+        <input name="userId" type="hidden">
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">昵称</label>
+            <div class="layui-input-inline">
+                <input name="nickName" type="text" class="layui-input layui-disabled" disabled />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">电话</label>
+            <div class="layui-input-inline">
+                <input name="phone" type="text" class="layui-input layui-disabled"  lay-verType="tips" lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">申请理由</label>
+            <div class="layui-input-inline">
+                <textarea name="applyContent" class="layui-textarea" rows="8" lay-verType="tips" lay-verify="required" placeholder="请输入申请理由" autocomplete="off"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn" lay-filter="modelUserInfoSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+<script type="text/javascript" src="res/layui/layui.js"></script>
+<script type="text/javascript">
+ layui.config({
+    base: 'res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
+  }).use(['jquery','form','config','layer'],function(){
+        var $ = layui.$,
+            form = layui.form,
+            config = layui.config,
+            layer =layui.layer;
+
+         var userId=sessionStorage.userId;
+        if(userId!='' && userId!=undefined){     
+            $.get(config.base_server+'api/getUserById',{"userId":userId},function(res){
+                //赋值，渲染
+                form.val('modelRegisterForm',res.data);
+            })
+        }
+        //提交
+        form.on('submit(modelUserInfoSubmit)', function (data) {
+              var jsonStr={
+                "userId":data.field.userId,
+                "nickName":data.field.nickName,
+                "phone":data.field.phone,
+                "applyContent":data.field.applyContent,
+              };
+              layer.load(2);
+              $.post(config.base_server+"api/applyMerchantMapper/add", data.field, function (res) {
+                  console.log(res);
+                  layer.closeAll('loading');
+                  if (res.code == 200) {
+                    layer.msg(res.msg, {
+                        icon: 1,
+                        time:1500,
+                        end:function(){
+                            top.location.href='commodity.html';
+                        }
+                    });          
+                  } else {
+                      layer.msg(res.msg, {icon: 2});
+                  }
+              }, 'json');
+              return false;
+          });
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>桃宝商城管理系统</title>
+  <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
+  <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
+  <script type="text/javascript" src="res/layui/layui.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+
+<body>
+
+  <div class="site-nav-bg">
+    <div class="site-nav w1200">
+      <p class="sn-back-home">
+        <i class="layui-icon layui-icon-home"></i>
+        <a href="commodity.html">首页</a>
+      </p>
+      <div class="sn-quick-menu">
+        <div class="login" style="display: '';"><a href="login.html">登录</a></div>
+        <div class="userinfo" style="display:none"><a href="#" ew-event="uinfo"><cate class="nickname"></cate></a></div>
+        <div class="sp-cart" style="display: none;"><a href="shopcart.html">购物车</a><span id="cartCount"></span></div>
+        <div class="my-order" style="display: none;"><a href="my-order.html">我的订单</a><span id="orderCount"></span></div>
+        <div class="logout" style="display:none"><a href="#"  ew-event="logout">退出</a></div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="header">
+    <div class="headerLayout w1200">
+      <div class="headerCon">
+        <h1 class="mallLogo">
+          <a href="#" title="桃宝商城管理系统">
+            桃宝商城管理系统
+          </a>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="content content-nav-base datails-content">
+    <div class="data-cont-wrap w1200">
+      <div class="crumb">
+        <a href="commodity.html">首页</a>
+        <span>></span>
+        <a href="commodity.html">所有商品</a>
+        <span>></span>
+        <a href="javascript:;">商品详情</a>
+      </div>
+      <div class="product-intro layui-clear" >
+         <div class="preview-wrap">
+          <a href="javascript:;"><img id="goodsImg"></a>
+        </div>
+        <div class="goods-details-wrap">
+          <ul>
+
+          </ul>
+        </div>
+        <div class="itemInfo-wrap">
+          <div class="itemInfo">
+            <div class="title">
+              <h4 id="goodsTitle"></h4>
+            </div>
+            <div class="summary" style="height: 200px;">
+              <p style="display:none;"><span></span> <del id="publishId"></del></p>
+              <p class="reference"><span>参考价</span> <del id="shopRePrice"></del></p>
+              <p class="activity"><span>价格</span><strong class="price"><i>￥</i><span id="shopPrice"></span></strong></p>
+            	<p class="address-box"><span>品牌</span><span id="shopAuthor"></span></p>
+            	<p class="address-box"><span>商家名称</span><span id="shopPress"></span></p>
+            </div>
+            <div class="choose-attrs">
+              <div class="number layui-clear">
+                <span class="title">数&nbsp;&nbsp;&nbsp;&nbsp;量</span>
+                <div class="number-cont">
+                  <span class="cut btn">-</span>
+                  <input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" maxlength="4" type="" name="" value="1">
+                  <span class="add btn">+</span>
+                </div>
+              </div>
+            </div>
+            <div class="choose-btns">
+              <button class="layui-btn layui-btn-primary purchase-btn" id="buySubmit">立刻购买</button>
+              <button class="layui-btn  layui-btn-danger car-btn" id="addCartSubmit"><i class="layui-icon layui-icon-cart-simple"></i>加入购物车</button>  
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <div>
+          <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+              <li class="layui-this">商品详情</li><
+              <li>全部评价<span id="appraise-count"></span></li>
+            </ul>
+            <div class="layui-tab-content">
+              <div class="layui-tab-item layui-show">
+                <div class="dt">
+                  <div class="dt01">
+
+                  </div>
+                </div>
+              </div>
+                <div class="layui-tab-item" id="LAY-MESSAGE-LIST">
+                  <div>
+                    <ul class="message-list" id="list-cont">
+                    	//模版引擎导入 
+                      <script type="text/html" id="appraiseTpl">
+                        {{# layui.each(d.data,function(index,item){}}    
+                        <li class="zoomIn article">
+                          <div class="comment-parent">
+                              <a name=""></a>
+                              <img src="{{item.avatar}}"/>                 
+                          </div>
+                          <div class="info">
+                              <span class="username">{{item.nickName}}</span>
+                          </div>
+                          <div class="comment-content">
+                              <p>{{item.comments}}</p>
+                          </div>
+                          <p class="info info-footer">
+                            <span class="comment-time">{{item.appraiseTime}}</span>
+                            {{#  if(item.commodityQuality ==1 ){ }}
+                            <span>商品质量(极差)</span>
+                            {{#  } else if(item.commodityQuality ==2){ }}
+                            <span>商品质量(差)</span>
+                            {{#  } else if(item.commodityQuality ==3){ }}
+                            <span>商品质量(中等)</span>
+                            {{#  } else if(item.commodityQuality ==4){ }}
+                            <span>商品质量(好)</span>
+                            {{#  } else { }}
+                            <span>商品质量(极好)</span>
+                            {{#  } }}
+                                                      
+                            {{#  if(item.logisticsService ==1 ){ }}
+                            <span>物流服务(极差)</span>
+                            {{#  } else if(item.logisticsService ==2){ }}
+                            <span>物流服务(差)</span>
+                            {{#  } else if(item.logisticsService ==3){ }}
+                            <span>物流服务(中等)</span>
+                            {{#  } else if(item.logisticsService ==4){ }}
+                            <span>物流服务(好)</span>
+                            {{#  } else { }}
+                            <span>物流服务(极好)</span>
+                            {{#  } }}
+
+                            {{#  if(item.coincide ==1 ){ }}
+                            <span>描述相符(极差)</span>
+                            {{#  } else if(item.coincide ==2){ }}
+                            <span>描述相符(差)</span>
+                            {{#  } else if(item.coincide ==3){ }}
+                            <span>描述相符(中等)</span>
+                            {{#  } else if(item.coincide ==4){ }}
+                            <span>描述相符(好)</span>
+                            {{#  } else { }}
+                            <span>描述相符(极好)</span>
+                            {{#  } }}
+                          </p>
+                          <hr>
+                        </li>
+                        {{# }); }}
+                      </script> 
+                    </ul>
+                </div>
+              </div>
+            </div> 
+          </div>
+  
+        </div>
+    </div>
+  </div>
+<script type="text/javascript" src="res/static/js/util/reconnecting-websocket.min.js"></script>
+<script type="text/javascript">
+  layui.config({
+    base: 'res/static/js/util/'
+  }).use(['mm','jquery','config','laytpl','form','layim','upload'],function(){
+      var mm = layui.mm,
+          $ = layui.$,
+          form = layui.form,
+          config = layui.config,
+          layim = layui.layim,
+          upload = layui.upload,
+          laytpl = layui.laytpl;
+
+          var websocket = null; 
+
+          layim.config({
+              init: {
+                //配置客户信息
+                mine: {
+                  "username": sessionStorage.nickName//我的昵称
+                  ,"id": sessionStorage.userId==null?"":sessionStorage.userId.toString()//我的ID
+                  ,"status": "online" //在线状态 online：在线、hide：隐身
+                  ,"avatar": sessionStorage.avatar //我的头像
+                }
+              }
+              //开启客服模式
+              ,brief: true
+              ,uploadImage: {
+                url: config.base_server+'/api/file/uploadIm' //接口地址
+                ,type: 'post' //默认post
+            }
+          });
+
+        var userId=sessionStorage.userId;
+        if(userId!='' && userId!=undefined){     
+            $('.login').css('display','none');
+            $('.nickname').text(sessionStorage.nickName);
+            $('.userinfo').css('display',''); 
+            $('.sp-cart').css('display','');
+            $('.my-order').css('display','');
+            $('.logout').css('display','');
+            $.get(config.base_server+"api/cart/countByUser",{"userId":userId},function(res){
+              $('#cartCount').text(res.data); 
+            })
+            $.get(config.base_server+"api/order/countByUser",{"userId":userId},function(res){
+              $('#orderCount').text(res.data); 
+            })
+
+            //判断当前浏览器是否支持WebSocket
+            if ('WebSocket' in window) {
+                websocket = new ReconnectingWebSocket("ws://localhost:8089/websocket/" + userId.toString());
+            } else {
+              alert('当前浏览器 Not support websocket')
+            }
+
+           //连接发生错误的回调方法
+            websocket.onerror = function() {}; 
+            //连接成功建立的回调方法
+             websocket.onopen = function() {};
+            //接收到消息的回调方法
+            websocket.onmessage = function(event) {          
+                var data = event.data;//服务器返回的消息，前端页面可以根据不同的消息做不同的操作。   
+                console.log(data);
+                layim.getMessage(JSON.parse(data));
+                               
+            }
+            //连接关闭的回调方法
+            websocket.onclose = function() {
+            //    setMessageInnerHTML("WebSocket连接关闭");
+            }
+
+            //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+            window.onbeforeunload = function() {
+                closeWebSocket();
+            } 
+
+          //打开一个客服面板
+          layim.chat({
+            name: '客服中心' //名称
+            ,type: 'friend' //聊天类型
+            ,avatar: 'http://tp1.sinaimg.cn/1571889140/180/40030060651/1' //头像
+            ,id: config.collectUserId //定义唯一的id方便你处理信息
+          });
+          layim.setChatMin(); //收缩聊天面板
+        }
+
+         //将消息显示在网页上
+         function setMessageInnerHTML(innerHTML) {
+        }
+        //关闭WebSocket连接
+        function closeWebSocket() {
+            websocket.close();
+        } 
+        //发送消息
+        function send(msg) {
+            websocket.send(msg);
+        }
+
+         //layim消息发送监听器
+        layim.on('sendMessage', function(res) {
+            var mine = res.mine; //包含我发送的消息及我的信息  
+            var to = res.to; //对方的信息
+            var msg = {
+                    'userId':mine.id,
+                    "nickName":mine.username,
+                    'avatar':mine.avatar,
+                    "type":to.type,
+                    'collectUserId': to.id,
+                    'collectUserName':to.name,
+                    'content': mine.content            
+                  }
+            console.log(JSON.stringify(msg));
+            send(JSON.stringify(msg));
+        });
+
+      var cur = $('.number-cont input').val();
+
+      //获取商品id
+      var goodsSn= window.location.href.split("?")[1].split("=")[1];
+        var goodsType;
+        mm.request({
+          url: config.base_server+'api/goods/details',
+          data:{"goodsSn":goodsSn},
+          success : function(res){
+            layui.each(res.data,function(index,item){
+              console.log(res);
+              $('#goodsImg').attr('src',item.goodsImg);
+              $('#goodsTitle').text(item.goodsName);
+              $('#shopPrice').text(item.shopPrice);
+              $('#shopRePrice').text(item.shopRePrice);
+              $('#shopAuthor').text(item.author);
+              $('#shopPress').text(item.press);
+			        $('#publishId').text(item.publishId);
+              if(item.goodsColors){
+                var colorArr=item.goodsColors.split(",");
+                var colorH="";
+                for(j = 0,len=colorArr.length; j < len; j++) {
+                  colorH+='<span class="btn">'+colorArr[j]+'</span>';             
+                };
+                $('.color-cont').html(colorH);
+
+                $(".color-cont span").eq(0).addClass("active");
+
+                $('.color-cont span').on('click',function(){
+                  $(".color-cont span").removeClass("active");
+                  $(this).toggleClass("active");
+                })
+              }
+
+              if(item.goodsDetailsImgs){
+                var tempArr = item.goodsDetailsImgs.split(",");
+                var d="";
+                for(i = 0,len=tempArr.length;  i< len; i++) {
+                       d+='<li><a href="'+tempArr[i]+'" target="_blank"><img src='+tempArr[i]+' /></a></li>';
+       
+                };
+                $('.goods-details-wrap ul').html(d);
+
+                $(".goods-details-wrap ul li a").hover(function(){
+                    $('#goodsImg').attr('src',this.href);
+                },function(){
+                  $('#goodsImg').attr('src',item.goodsImg);
+                });
+
+                var h="";
+                for(j = 0,len=tempArr.length; j < len; j++) {
+                       h+='<div class="dt-mt">'+
+                            '<img src="'+tempArr[j]+'">'+
+                          '</div>';                 
+                };
+                $('.dt01').html(h);
+              }else{
+                var h='<div class="error-page">'+
+                        '<img class="error-page-img" src="res/static/img/ic_404.png">'+
+                        '<div class="error-page-info">'+
+                          '<div class="error-page-info-desc">该商品暂无详情查看哦!</div>'+
+                        '</div>'+
+                      '</div>';
+                $('.dt01').html(h);
+              }
+              aa(item.goodsType);
+            })
+          }
+        })
+    function aa(goodsType){
+        mm.request({
+            url: config.base_server+'api/goods/listByType',
+            data:{"goodsType":3},
+            success : function(res){
+
+              var h="";
+              var hh="";
+              layui.each(res.data,function(index,item){
+                
+              })
+              
+              $('.choose-attrs').append(hh);
+
+              $(".z-logo-cont ul").children("li").eq(0).addClass("actives");
+              $('.z-logo-cont ul li').on('click',function(){
+                  $(".z-logo-cont ul li").removeClass("actives");
+                  $(this).toggleClass("actives");
+              })
+
+          
+              $(".z-logo-cont ul li a").hover(function(){
+                    $(this).append("<p id='pic'><img src='"+this.href+"' id='pic1'></p>");
+                    $(".z-logo-cont ul li a").mousemove(function(e){
+                    $("#pic").css({
+                        "top":(e.pageY+10)+"px",
+                        "left":(e.pageX+20)+"px"
+                    }).fadeIn("fast");
+                  });
+                },function(){
+                  $("#pic").remove();
+                });
+            }
+          })  
+      }
+      
+
+      $('.size-cont span').on('click',function(){
+        $(".size-cont span").removeClass("active");
+        $(this).toggleClass("active");
+      })   
+      $('.number-cont .btn').on('click',function(){
+        if($(this).hasClass('add')){
+          cur++;
+        }else{
+          if(cur > 1){
+            cur--;
+          }  
+        }
+        $('.number-cont input').val(cur)
+      })
+     
+
+      //下单,立即购买
+      $('#buySubmit').click(function(){
+        var userId=sessionStorage.userId;
+        if(userId!='' && userId!=undefined){
+		  var publishId=$('#publishId').text();
+          var price=$('#shopPrice').text()*cur;
+          var orderStatus=0;
+          var madeLogo=$(".z-logo-cont ul li[class='actives']").attr('id')==null?"":$(".z-logo-cont ul li[class='actives']").attr('id');
+          var madeText=$("#madeText").val()==null?"":$("#madeText").val();
+          var goodsColor=$(".color-cont span[class='btn active']").text()==null?"":$(".color-cont span[class='btn active']").text();
+          var goodsSize=$(".size-cont span[class='btn active']").text()==null?"":$(".size-cont span[class='btn active']").text();
+          var jsonStr={
+		        "publishId":publishId,
+            "goodsSn":goodsSn,
+            "goodsNum":cur,
+            "goodsMoney":price,
+            'orderStatus':orderStatus,
+            'userId':userId,
+            'madeLogo':madeLogo,
+            "madeText":madeText,
+            "goodsColor":goodsColor,
+            "goodsSize":goodsSize
+            };
+          
+           $.post(config.base_server+'api/order/addOrder',jsonStr,function(res){
+            console.log(res);
+             if(res.code==200){
+                 layer.msg(res.msg, {
+                   icon: 1,
+                   time:1000,
+                   end:function(){
+                     location.href='commodity.html';
+                   }
+                 });                  
+               }else{
+                 layer.msg(res.msg, {icon: 2});
+               }
+           })
+        }else{
+          layer.msg("请先登录，在操作");
+        }
+      })
+
+      //添加购物车
+      $('#addCartSubmit').click(function(){
+        var userId=sessionStorage.userId;
+        if(userId!='' && userId!=undefined){
+          var price=$('#shopPrice').text()*cur;
+          var madeLogo=$(".z-logo-cont ul li[class='actives']").attr('id')==null?"":$(".z-logo-cont ul li[class='actives']").attr('id');
+          var madeText=$("#madeText").val()==null?"":$("#madeText").val();
+          var goodsColor=$(".color-cont span[class='btn active']").text()==null?"":$(".color-cont span[class='btn active']").text();
+          var goodsSize=$(".size-cont span[class='btn active']").text()==null?"":$(".size-cont span[class='btn active']").text();
+          var jsonStr={
+            "goodsSn":goodsSn,
+            "goodsNum":cur,
+            'userId':userId,
+            "goodsMoney":price,
+            'madeLogo':madeLogo,
+            "madeText":madeText,
+            "goodsColor":goodsColor,
+            "goodsSize":goodsSize
+            };
+          $.post(config.base_server+'api/cart/add',jsonStr,function(res){
+            if(res.code==200){
+                layer.msg(res.msg, {
+                  icon: 1,
+                  time:1500,
+                  end:function(){
+                    location.href='commodity.html';
+                  }
+                });                  
+              }else{
+                layer.msg(res.msg, {icon: 2});
+              }
+          })
+        }else{
+          layer.msg("请先登录，在操作");
+        }
+      })
+			//查询评价信息
+      var html = appraiseTpl.innerHTML;
+      var listCont = document.getElementById('list-cont');
+       mm.request({
+         url: config.base_server+"api/appraise/list",
+         data:{"goodsSn":goodsSn},
+         success : function(res){
+            $('#appraise-count').text('('+res.count+')');
+           listCont.innerHTML = mm.renderHtml(html,res)
+         },
+         error: function(res){
+           console.log(res);
+         }
+       })
+  });
+</script>
+
+
+</body>
+</html>

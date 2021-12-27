@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>桃宝商城管理系统</title>
+  <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
+  <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+
+  <div class="site-nav-bg">
+    <div class="site-nav w1200">
+      <p class="sn-back-home">
+        <i class="layui-icon layui-icon-home"></i>
+        <a href="commodity.html">首页</a>
+      </p>
+      <div class="sn-quick-menu">
+        <div class="login" style="display: '';"><a href="login.html">登录</a></div>
+        <div class="userinfo" style="display:none"><a href="#" ew-event="uinfo"><cate class="nickname"></cate></a></div>
+        <div class="sp-cart" style="display: none;"><a href="shopcart.html">购物车</a><span id="cartCount"></span></div>
+        <div class="my-order" style="display: none;"><a href="my-order.html">我的订单</a><span id="orderCount"></span></div>
+        <div class="logout" style="display:none"><a href="#"  ew-event="logout">退出</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="headerLayout w1200">
+      <div class="headerCon">
+        <h1 class="mallLogo">
+          <a href="#" title="桃宝商城管理系统">
+            桃宝商城管理系统
+          </a>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="content content-nav-base  login-content">
+    <div class="main-nav">
+      <div class="inner-cont0">
+        <div class="inner-cont1 w1200">
+          <div class="inner-cont2">
+            <a href="commodity.html" class="active">所有商品</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="login-bg">
+      <div class="login-cont w1200">
+        <div class="form-box">
+          <form class="layui-form" action="">
+            <legend>用户登录</legend>
+            <div class="layui-form-item">
+              <div class="layui-inline iphone">
+                <div class="layui-input-inline">
+                  <i class="layui-icon layui-icon-cellphone iphone-icon"></i>
+                  <input type="text" name="username" id="username" lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline iphone">
+                <div class="layui-input-inline">
+                  <i class="layui-icon layui-icon-password iphone-icon"></i>
+                  <input id="password" type="password" name="password" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <a href="#" id="btnRegister" style="color:#009688;">账号注册</a>
+			  <a href="#" id="btnResetPsw" style="color:red">忘记密码</a>
+            </div>
+            <div class="layui-form-item login-btn">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="loginSubmit" >登录</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="ng-promise-box">
+      <div class="ng-promise w1200">
+        <p class="text">
+          <a class="icon1" href="javascript:;">7天无理由退换货</a>
+          <a class="icon2" href="javascript:;">满99元全场免邮</a>
+          <a class="icon3" style="margin-right: 0" href="javascript:;">100%品质保证</a>
+        </p>
+      </div>
+    </div>
+    <div class="mod_help w1200">                                     
+      <p class="coty">桃宝商城管理系统 &copy; 2020-2021</p>
+    </div>
+  </div>
+
+  <!-- 注册弹窗 -->
+<script type="text/html" id="modelRegister">
+  <form id="modelRegisterForm" lay-filter="modelRegisterForm" class="layui-form model-form">
+      <div class="layui-form-item">
+          <label class="layui-form-label layui-form-required">账号</label>
+          <div class="layui-input-inline">
+              <input name="username" type="text" class="layui-input" lay-verType="tips" lay-verify="required" placeholder="请输入账号" autocomplete="off" />
+          </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label layui-form-required">密码</label>
+        <div class="layui-input-inline">
+            <input name="password" type="password" class="layui-input" lay-verType="tips" lay-verify="required|pass" placeholder="请输入密码" autocomplete="off" />
+        </div>
+    </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label layui-form-required">昵称</label>
+          <div class="layui-input-inline">
+              <input name="nickName" type="text" class="layui-input" lay-verType="tips" lay-verify="required" placeholder="请输入昵称" autocomplete="off"/>
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label layui-form-required">电话</label>
+          <div class="layui-input-inline">
+              <input name="phone" type="text" class="layui-input"  lay-verType="tips" lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off"/>
+          </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="sex" value="男" title="男" checked/>
+            <input type="radio" name="sex" value="女" title="女"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label layui-form-required">地址</label>
+        <div class="layui-input-inline">
+            <input name="receivingAddress" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" placeholder="请输入常用地址" autocomplete="off"/>
+        </div>
+    </div>
+      <div class="layui-form-item text-right">
+          <button class="layui-btn" lay-filter="modelRegisterSubmit" lay-submit>保存</button>
+      </div>
+  </form>
+</script>
+
+ <!-- 忘记密码弹窗 -->
+<script type="text/html" id="modelResetPsw">
+  <form id="modelRegisterForm" lay-filter="modelRegisterForm" class="layui-form model-form">
+      <div class="layui-form-item">
+          <label class="layui-form-label layui-form-required">账号</label>
+          <div class="layui-input-inline">
+              <input name="username" type="text" class="layui-input" lay-verType="tips" lay-verify="required" placeholder="请输入账号" autocomplete="off" />
+          </div>
+      </div>
+	  <div class="layui-form-item">
+          <label class="layui-form-label layui-form-required">电话</label>
+          <div class="layui-input-inline">
+              <input name="phone" type="text" class="layui-input"  lay-verType="tips" lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off"/>
+          </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label layui-form-required">新密码</label>
+        <div class="layui-input-inline">
+            <input name="newPsw" type="password" class="layui-input" lay-verType="tips" lay-verify="required|pass" placeholder="请输入密码" autocomplete="off" />
+        </div>
+    </div>
+	<div class="layui-form-item">
+        <label class="layui-form-label layui-form-required">确认密码</label>
+        <div class="layui-input-inline">
+            <input name="surePsw" type="password" class="layui-input" lay-verType="tips" lay-verify="required|pass" placeholder="请输入密码" autocomplete="off" />
+        </div>
+    </div>
+      <div class="layui-form-item text-right">
+          <button class="layui-btn" lay-filter="modelResetPswSubmit" lay-submit>保存</button>
+      </div>
+  </form>
+</script>
+<script type="text/javascript" src="res/layui/layui.js"></script>
+
+  <script type="text/javascript">
+   layui.config({
+      base: 'res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
+    }).use(['jquery','form','config'],function(){
+          var $ = layui.$,
+              form = layui.form,
+              config = layui.config;
+
+        var userId=sessionStorage.userId;
+        if(userId!='' && userId!=undefined){     
+            $('.login').css('display','none');
+            $('.nickname').text(sessionStorage.nickName);
+            $('.userinfo').css('display',''); 
+            $('.sp-cart').css('display','');
+            $('.my-order').css('display','');
+            $('.logout').css('display','');
+            $.get(config.base_server+"api/cart/countByUser",{"userId":userId},function(res){
+              $('#cartCount').text(res.data); 
+            })
+            $.get(config.base_server+"api/order/countByUser",{"userId":userId},function(res){
+              $('#orderCount').text(res.data); 
+            })
+        }
+        //登录
+        form.on('submit(loginSubmit)', function (data) {
+                layer.load(2);
+                $.post(config.base_server+"api/login", data.field, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.closeAll();
+                        //登陆成功，缓存需要的信息
+                        sessionStorage.setItem('nickName',res.user.nickName);
+                        sessionStorage.setItem('avatar',res.user.avatar);
+                        sessionStorage.setItem('userId',res.user.userId);
+                        layer.msg(res.msg, {
+                          icon: 1,
+                          time:1000,
+                          end:function(){
+                            location.href='commodity.html';
+                          }
+                        });           
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+                return false;
+            });
+
+        // 注册
+        $('#btnRegister').click(function () {
+         layer.open({
+                type: 1,
+                title: '账号注册',
+                area:'400px',
+                content: $('#modelRegister').html(),
+                success: function (layero, dIndex) {
+                    form.render('radio');
+                      // 表单提交事件
+                      form.on('submit(modelRegisterSubmit)', function (data) {
+                        layer.load(2);
+                        $.post(config.base_server+"api/register", data.field, function (res) {
+                            layer.closeAll('loading');
+                            if (res.code == 200) {
+                                layer.close(dIndex);
+                                layer.msg(res.msg, {icon: 1});
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        }, 'json');
+                      return false;
+                  });
+                }
+            });
+        });
+		
+		// 忘记密码
+        $('#btnResetPsw').click(function () {
+         layer.open({
+                type: 1,
+                title: '忘记密码',
+                area:'400px',
+                content: $('#modelResetPsw').html(),
+                success: function (layero, dIndex) {
+                    form.render('radio');
+                      // 表单提交事件
+                      form.on('submit(modelResetPswSubmit)', function (data) {
+                        layer.load(2);
+                        $.post(config.base_server+"api/resetPsw", data.field, function (res) {
+                            layer.closeAll('loading');
+                            if (res.code == 200) {
+                                layer.close(dIndex);
+                                layer.msg(res.msg, {icon: 1});
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        }, 'json');
+                      return false;
+                  });
+                }
+            });
+        });
+
+      })
+  </script>
+
+</body>
+</html>
