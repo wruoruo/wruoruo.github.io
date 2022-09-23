@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
+    <script type="text/javascript" src="./option.js"></script>
   <head>
 	<meta charset="UTF-8">
-    <title>wruoruo's blog</title>
+    <title>学校审核情况</title>
     <style>
 * {
     box-sizing: border-box;
@@ -17,11 +18,11 @@ body {
 
 /* 标题 */
 .header {
-    padding: 30px;
+    padding: 10px;
     text-align: center;
-    background: lightpink ;
+    background: LightSteelBlue  ;
     color: white;
-    text-shadow: 4px 4px salmon;letter-spacing: 20px;
+    text-shadow: 4px 4px SteelBlue;letter-spacing: 20px;
 }
  
 /* 标题字体加大 */
@@ -31,19 +32,10 @@ body {
 
 /* 字体样式设置 */
 .word1{
-	color: lightcoral;
+	color: LightSlateGray;
 }
 .word2{
-	color: indianred;
-}
-.word3{
-  color: salmon;
-}
-.word4{
-  color:lightpink;
-}
-.word5{
-  color:tomato;
+	color: SteelBlue ;
 }
 
 /* 导航（含下拉框） */
@@ -52,7 +44,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: salmon;
+  background-color: LightSlateGray;
 }
 
 .navbar li {
@@ -68,7 +60,8 @@ body {
 }
 
 .navbar li a:hover, .dropdown:hover .dropbtn {
-  background-color: lightsalmon;
+  background-color: WhiteSmoke ;
+  color:black;
 }
 
 .navbar li.dropdown {
@@ -88,7 +81,8 @@ body {
 }
 
 .navbar .dropdown-content a {
-  color: tomato;
+  background-color: WhiteSmoke ;
+  color:black;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
@@ -101,30 +95,6 @@ body {
   display: block;
 }
  
-/* 粘性框 */
-.sticky {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0);
-  margin-left: 80px;
-  width: 50%;
-  box-sizing: border-box;
-  border: 3px solid lightsalmon;
-}
-
-
-
-div.polaroid {
-  float: left;
-  width: 50%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  text-align: center;
-}
-
-
-
-
 
 /* 列容器 */
 .row {  
@@ -137,41 +107,28 @@ div.polaroid {
 /* 创建两个列 */
 /* 边栏 */
 .side {
-    -ms-flex: 30%; /* IE10 */
-    flex: 30%;
-    background-color: lavenderblush;
+    -ms-flex: 20%; /* IE10 */
+    flex: 20%;
+    background-color:WhiteSmoke;
     padding: 20px;
 }
  
 /* 主要的内容区域 */
 .main {   
-    -ms-flex: 70%; /* IE10 */
-    flex: 70%;
-    background-color: mistyrose;
+    -ms-flex: 80%; /* IE10 */
+    flex: 80%;
+    background-color:WhiteSmoke;
     padding: 20px;
 }
  
 
-/* 图片 */
-.img1 {
-    background-color: lightpink;
-    width: 100%;
-    padding: 20px;
-}
 
-/* 图片 */
-.img2 {
-  float: left;
-    background-color: lightpink;
-    width: 50%;
-    padding: 20px;
-}
  
 /* 底部 */
 .footer {
     padding: 10px;
     text-align: center;
-    background: lightpink;
+    background: LightSteelBlue ;
     color: white;
 }
  
@@ -197,21 +154,16 @@ div.container {
 
 <body>
 <div class="header">
-  <h1>若若的博客</h1>
-  <p>wruoruo's blog</p>
+  <h1>学校审核情况</h1>
+  <p>冕宁</p>
 </div>
  
 <ul class="navbar">
-  <li><a href="#">首页</a></li>
-  <li><a href="#">关于</a></li>
-  <li><a href="#">分类</a></li>
-  <li><a href="#">其他</a></li>
+  <li><a href="#">搜索</a></li>
   <li class="dropdown">
     <a href="javascript:void(0)" class="dropbtn">&nbsp;&nbsp;更&nbsp;&nbsp;&nbsp;&nbsp;多&nbsp;&nbsp;</a>
     <div class="dropdown-content">
-      <a href="#">联系我呀</a>
-      <a href="#">联系我呀</a>
-      <a href="#">联系我呀</a>
+      <a href="#">管理员登录</a>
     </div>
   </li>
 </ul>
@@ -219,47 +171,33 @@ div.container {
 
 <div class="row">
   <div class="side">
-      <h2 class="word1">关于博客</h2>
-      <p class="word2">若若管理此博客，博客还在完善中...</p>
-      <div class="sticky" ><img src="./image/iamfine.png"  style="width:100%"></div>
-      <p class="word2">&nbsp;&nbsp;&nbsp;&nbsp;可爱(拼音:kě ài)，汉语词汇，意思是令人敬爱的。也指令人喜爱的，讨人喜欢的，深受热爱的。</p>
-      <h3 class="word2">引经据典</h3>
-      <p class="word2">《书经.大禹谟》:"可爱非君?可畏非民?"
+      <h2 class="word1">审核说明</h2>
+      <p class="word2">三种审核状态</p>
+      <p class="word2">&nbsp;&nbsp;&nbsp;&nbsp;待审核：即还未进行审核，耐心等待即可</p>
+      <p class="word2">&nbsp;&nbsp;&nbsp;&nbsp;通过：即审核成功通过</p>
+      <p class="word2">&nbsp;&nbsp;&nbsp;&nbsp;未通过：即审核未通过，需要修改相关材料
       <br>
-【宋】陆游《老学庵笔记.卷四》:"荆棘中有崖石，刻树石二大字，奇古可爱。"</p>
+
       <div class="img1" style="height:50px;"></div><br>
       <div class="img1" style="height:50px;"></div><br>
       <div class="img1" style="height:50px;"></div>
   </div>
 
   <div class="main">
-      <h2 class="word2" style="text-align: center;">博客作业</h2>
-      <h5 class="word2">在这里，两张图片中一张引用方式为绝对路径（https://wruoruo.github.io/image/drink.jpg），另一张为相对路径（./image/snack.jpg）。</h5>
-  <div class="polaroid">
-   <img src="https://wruoruo.github.io/image/drink.jpg"  style="width:100%">
-    <div class="container">
-      <p class=word5>绝对路径</p>
-    </div>
+      
   </div>
-  <div class="polaroid">
-    <img src="./image/snack.jpg"  style="width:100%">
-    <div class="container">
-      <p class=word5>相对路径</p>
-    </div>
-  </div>
-
   </div>
   <br><br><br><br>
   <br><br><br><br>
   <br><br><br><br>
   <br><br><br><br>
-<hr color=pink size="5">
+<hr color=lightblue size="5">
  <hr color=white size="5">
 </div>
  
 <div class="footer">
-  <h2>努力学习中...</h2>
-  <p> &nbsp;&nbsp;By&nbsp;&nbsp;王若涵6109119116<br></p>
+  <h2>如对上述情况有疑问</h2>
+  <p> &nbsp;&nbsp;联系电话&nbsp;&nbsp;13778606690<br></p>
 </div>
 </body>
 <html>
